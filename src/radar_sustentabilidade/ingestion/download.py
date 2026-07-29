@@ -3,10 +3,12 @@
 import hashlib
 import json
 import os
+import time
 from collections.abc import Callable
 from datetime import UTC, datetime
 from pathlib import Path
 from typing import BinaryIO
+from urllib.error import URLError
 from urllib.request import Request, urlopen
 
 from radar_sustentabilidade.ingestion.catalog import Source
@@ -44,8 +46,13 @@ def download_source(
     *,
     opener: Callable = urlopen,
     retrieved_at: datetime | None = None,
+    max_attempts: int = 4,
+    sleeper: Callable[[float], None] = time.sleep,
 ) -> dict:
     """Baixa uma fonte, calcula seu hash e persiste um manifesto atômico."""
+    if max_attempts < 1:
+        raise ValueError("max_attempts deve ser maior ou igual a 1")
+
     target_directory = data_root / source.source_id / str(source.reference_year)
     target_directory.mkdir(parents=True, exist_ok=True)
 
@@ -68,26 +75,43 @@ def download_source(
         _write_manifest(manifest_path, manifest)
         return manifest
 
-    existing_bytes = partial_path.stat().st_size if partial_path.exists() else 0
-    headers = {"User-Agent": USER_AGENT}
-    if existing_bytes:
-        headers["Range"] = f"bytes={existing_bytes}-"
+    response_metadata = {}
+    for attempt in range(1, max_attempts + 1):
+        existing_bytes = (
+            partial_path.stat().st_size if partial_path.exists() else 0
+        )
+        headers = {"User-Agent": USER_AGENT}
+        if existing_bytes:
+            headers["Range"] = f"bytes={existing_bytes}-"
 
-    request = Request(source.download_url, headers=headers)
-    with opener(request, timeout=60) as response:
-        status = getattr(response, "status", 200)
-        resume_download = bool(existing_bytes and status == 206)
-        mode = "ab" if resume_download else "wb"
+        request = Request(source.download_url, headers=headers)
+        try:
+            with opener(request, timeout=60) as response:
+                status = getattr(response, "status", 200)
+                resume_download = bool(existing_bytes and status == 206)
+                mode = "ab" if resume_download else "wb"
 
-        with partial_path.open(mode) as output_file:
-            while chunk := response.read(CHUNK_SIZE):
-                output_file.write(chunk)
+                with partial_path.open(mode) as output_file:
+                    while chunk := response.read(CHUNK_SIZE):
+                        output_file.write(chunk)
 
-        response_metadata = {
-            "final_url": getattr(response, "url", source.download_url),
-            "etag": _response_header(response, "ETag"),
-            "last_modified": _response_header(response, "Last-Modified"),
-        }
+                response_metadata = {
+                    "final_url": getattr(
+                        response,
+                        "url",
+                        source.download_url,
+                    ),
+                    "etag": _response_header(response, "ETag"),
+                    "last_modified": _response_header(
+                        response,
+                        "Last-Modified",
+                    ),
+                }
+            break
+        except (URLError, TimeoutError, ConnectionError, OSError):
+            if attempt == max_attempts:
+                raise
+            sleeper(2 ** (attempt - 1))
 
     os.replace(partial_path, final_path)
     timestamp = retrieved_at or datetime.now(UTC)

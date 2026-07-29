@@ -3,6 +3,7 @@ import json
 from datetime import UTC, datetime
 from io import BytesIO
 from pathlib import Path
+from urllib.error import URLError
 from urllib.request import Request
 from zipfile import ZipFile
 
@@ -121,6 +122,34 @@ def test_partial_download_is_resumed(tmp_path: Path) -> None:
 
     assert final_path.read_bytes() == b"first-second"
     assert manifest["status"] == "downloaded"
+
+
+def test_transient_error_is_retried(tmp_path: Path) -> None:
+    attempts = 0
+    delays = []
+
+    def opener(request: Request, timeout: int) -> FakeResponse:
+        nonlocal attempts
+        attempts += 1
+        if attempts == 1:
+            raise URLError("temporary failure")
+        return FakeResponse(b"content")
+
+    manifest = download_source(
+        make_source(),
+        tmp_path,
+        opener=opener,
+        sleeper=delays.append,
+    )
+
+    assert attempts == 2
+    assert delays == [1]
+    assert manifest["status"] == "downloaded"
+
+
+def test_attempt_count_must_be_positive(tmp_path: Path) -> None:
+    with pytest.raises(ValueError, match="max_attempts"):
+        download_source(make_source(), tmp_path, max_attempts=0)
 
 
 def test_inventory_lists_members_without_extracting(tmp_path: Path) -> None:
