@@ -1,5 +1,10 @@
+from typer.testing import CliRunner
+
 from radar_sustentabilidade import __version__
+from radar_sustentabilidade.cli import app
 from radar_sustentabilidade.config import Settings
+
+runner = CliRunner()
 
 
 def test_version_is_defined() -> None:
@@ -11,3 +16,10 @@ def test_default_database_settings() -> None:
 
     assert settings.postgres_db == "radar_educacao"
     assert settings.postgres_port == 5432
+
+
+def test_version_command() -> None:
+    result = runner.invoke(app, ["version"])
+
+    assert result.exit_code == 0
+    assert result.stdout.strip() == __version__

@@ -6,7 +6,7 @@
 - [x] Definir pergunta central e princípios analíticos.
 - [x] Criar estrutura inicial de Python e SQL.
 - [x] Configurar PostgreSQL para desenvolvimento local.
-- [ ] Instalar dependências e executar os testes no ambiente local.
+- [x] Instalar dependências e executar os testes no ambiente local.
 
 ## Marco 1 — Inventário e aquisição
 
