@@ -10,8 +10,8 @@
 
 ## Marco 1 — Inventário e aquisição
 
-- [ ] Selecionar o recorte temporal inicial.
-- [ ] Registrar os arquivos oficiais, URLs e dicionários de dados.
+- [x] Selecionar o recorte temporal inicial.
+- [x] Registrar os arquivos oficiais, URLs e localização dos dicionários.
 - [ ] Implementar download com retomada, checksum e idempotência.
 - [ ] Criar relatório de qualidade por arquivo e ano.
 - [ ] Documentar mudanças de leiaute entre edições.

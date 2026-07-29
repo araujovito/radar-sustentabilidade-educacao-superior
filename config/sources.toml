@@ -1,0 +1,41 @@
+schema_version = 1
+catalog_updated_on = 2026-07-28
+
+[scope]
+initial_year = 2024
+history_start_year = 2014
+history_end_year = 2024
+country = "Brasil"
+education_level = "graduação"
+intended_grain = [
+    "ano",
+    "instituicao",
+    "curso",
+    "local_oferta",
+    "modalidade",
+]
+
+[[sources]]
+id = "inep_censo_superior_microdados_2024"
+title = "Microdados do Censo da Educação Superior 2024"
+publisher = "Instituto Nacional de Estudos e Pesquisas Educacionais Anísio Teixeira (Inep)"
+reference_year = 2024
+kind = "microdata_archive"
+format = "zip"
+role = "primary"
+status = "active"
+landing_url = "https://www.gov.br/inep/pt-br/acesso-a-informacao/dados-abertos/microdados/censo-da-educacao-superior"
+download_url = "https://download.inep.gov.br/microdados/microdados_censo_da_educacao_superior_2024.zip"
+documentation_location = "inside_archive"
+documentation_notes = "O pacote oficial distribui os microdados e seus arquivos auxiliares. Os nomes, tamanhos e checksums dos membros serão registrados após a primeira aquisição."
+verified_on = 2026-07-28
+
+[historical_series]
+id = "inep_censo_superior_microdados"
+publisher = "Instituto Nacional de Estudos e Pesquisas Educacionais Anísio Teixeira (Inep)"
+start_year = 2014
+end_year = 2024
+landing_url = "https://www.gov.br/inep/pt-br/acesso-a-informacao/dados-abertos/microdados/censo-da-educacao-superior"
+download_url_template = "https://download.inep.gov.br/microdados/microdados_censo_da_educacao_superior_{year}.zip"
+activation_stage = "after_2024_quality_gate"
+notes = "Cada edição deverá ser validada individualmente. O padrão de URL não garante que leiautes, nomes internos ou definições sejam idênticos entre os anos."

@@ -81,3 +81,9 @@ banco. As credenciais fornecidas são apenas para desenvolvimento local.
 - manter todas as transformações reproduzíveis.
 
 O planejamento detalhado está em [ROADMAP.md](ROADMAP.md).
+
+## Decisões registradas
+
+- [Recorte analítico inicial](docs/scope.md)
+- [Catálogo inicial de fontes](docs/data_catalog.md)
+- [Catálogo legível por máquina](config/sources.toml)
