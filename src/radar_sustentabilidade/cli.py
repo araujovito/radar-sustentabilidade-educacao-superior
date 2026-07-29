@@ -6,6 +6,7 @@ from pathlib import Path
 import typer
 
 from radar_sustentabilidade import __version__
+from radar_sustentabilidade.analysis import write_mvp_summary
 from radar_sustentabilidade.ingestion.archive import (
     extract_csv_members,
     write_inventory,
@@ -116,6 +117,21 @@ def extract_tables(
     typer.echo(
         f"{manifest['extracted_file_count']} tabelas extraídas em {output_dir}"
     )
+
+
+@app.command("build-mvp")
+def build_mvp(
+    courses_csv: Path = Path(
+        "data/interim/censo_superior_2024/MICRODADOS_CADASTRO_CURSOS_2024.CSV"
+    ),
+    institutions_csv: Path = Path(
+        "data/interim/censo_superior_2024/MICRODADOS_ED_SUP_IES_2024.CSV"
+    ),
+    output: Path = Path("reports/2024/mvp_summary.json"),
+) -> None:
+    """Constrói indicadores de oferta e concentração do recorte 2024."""
+    summary = write_mvp_summary(courses_csv, output, institutions_csv)
+    typer.echo(f"{summary['row_count']} ofertas analisadas; relatório em {output}")
 
 
 if __name__ == "__main__":

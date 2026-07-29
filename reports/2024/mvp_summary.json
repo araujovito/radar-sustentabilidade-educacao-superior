@@ -1,0 +1,225 @@
+{
+  "method": {
+    "unit": "ano + IES + curso + modalidade",
+    "scope": "graduação, Brasil, 2024",
+    "ead_reconciliation": "capacidade da dimensão 3; alunos agregados da dimensão 2",
+    "excluded_dimension": 4,
+    "graduation_intensity_is_cohort_rate": false
+  },
+  "row_count": 46146,
+  "unique_key": true,
+  "missing_components": {
+    "capacity": 7,
+    "students": 71
+  },
+  "by_modality": [
+    {
+      "modality_code": 1,
+      "course_offerings": 34820,
+      "institutions": 2444,
+      "offered_seats": 5074607,
+      "applications": 8657450,
+      "entrants": 1662860,
+      "enrollments": 5037482,
+      "graduates": 729086,
+      "weighted_seat_occupancy_rate": 0.327683,
+      "graduation_intensity": 0.144732
+    },
+    {
+      "modality_code": 2,
+      "course_offerings": 11326,
+      "institutions": 793,
+      "offered_seats": 18583348,
+      "applications": 7060934,
+      "entrants": 3346116,
+      "enrollments": 5186852,
+      "graduates": 604269,
+      "weighted_seat_occupancy_rate": 0.18006,
+      "graduation_intensity": 0.1165
+    }
+  ],
+  "highest_unconverted_capacity": [
+    {
+      "institution_id": 163,
+      "institution_name": "UNIVERSIDADE ESTÁCIO DE SÁ",
+      "course_id": 1599519,
+      "course_name": "Desenvolvimento Full Stack",
+      "modality_code": 2,
+      "offered_seats": 95191,
+      "entrants": 503,
+      "seat_occupancy_rate": 0.005284,
+      "unconverted_seat_capacity": 94688
+    },
+    {
+      "institution_id": 163,
+      "institution_name": "UNIVERSIDADE ESTÁCIO DE SÁ",
+      "course_id": 121297,
+      "course_name": "Administração",
+      "modality_code": 2,
+      "offered_seats": 100485,
+      "entrants": 19113,
+      "seat_occupancy_rate": 0.190207,
+      "unconverted_seat_capacity": 81372
+    },
+    {
+      "institution_id": 322,
+      "institution_name": "UNIVERSIDADE PAULISTA",
+      "course_id": 1363505,
+      "course_name": "Física",
+      "modality_code": 2,
+      "offered_seats": 73260,
+      "entrants": 60,
+      "seat_occupancy_rate": 0.000819,
+      "unconverted_seat_capacity": 73200
+    },
+    {
+      "institution_id": 322,
+      "institution_name": "UNIVERSIDADE PAULISTA",
+      "course_id": 1286560,
+      "course_name": "Sociologia",
+      "modality_code": 2,
+      "offered_seats": 73260,
+      "entrants": 95,
+      "seat_occupancy_rate": 0.001297,
+      "unconverted_seat_capacity": 73165
+    },
+    {
+      "institution_id": 322,
+      "institution_name": "UNIVERSIDADE PAULISTA",
+      "course_id": 1286489,
+      "course_name": "Ciências Biológicas",
+      "modality_code": 2,
+      "offered_seats": 73260,
+      "entrants": 97,
+      "seat_occupancy_rate": 0.001324,
+      "unconverted_seat_capacity": 73163
+    },
+    {
+      "institution_id": 322,
+      "institution_name": "UNIVERSIDADE PAULISTA",
+      "course_id": 1484724,
+      "course_name": "Gestão De Cooperativas",
+      "modality_code": 2,
+      "offered_seats": 73260,
+      "entrants": 100,
+      "seat_occupancy_rate": 0.001365,
+      "unconverted_seat_capacity": 73160
+    },
+    {
+      "institution_id": 322,
+      "institution_name": "UNIVERSIDADE PAULISTA",
+      "course_id": 1484729,
+      "course_name": "Secretariado",
+      "modality_code": 2,
+      "offered_seats": 73260,
+      "entrants": 122,
+      "seat_occupancy_rate": 0.001665,
+      "unconverted_seat_capacity": 73138
+    },
+    {
+      "institution_id": 322,
+      "institution_name": "UNIVERSIDADE PAULISTA",
+      "course_id": 1363508,
+      "course_name": "Química",
+      "modality_code": 2,
+      "offered_seats": 73260,
+      "entrants": 130,
+      "seat_occupancy_rate": 0.001775,
+      "unconverted_seat_capacity": 73130
+    },
+    {
+      "institution_id": 322,
+      "institution_name": "UNIVERSIDADE PAULISTA",
+      "course_id": 1132133,
+      "course_name": "Letras - Português E Espanhol",
+      "modality_code": 2,
+      "offered_seats": 73260,
+      "entrants": 145,
+      "seat_occupancy_rate": 0.001979,
+      "unconverted_seat_capacity": 73115
+    },
+    {
+      "institution_id": 322,
+      "institution_name": "UNIVERSIDADE PAULISTA",
+      "course_id": 1286528,
+      "course_name": "Geografia",
+      "modality_code": 2,
+      "offered_seats": 73260,
+      "entrants": 179,
+      "seat_occupancy_rate": 0.002443,
+      "unconverted_seat_capacity": 73081
+    }
+  ],
+  "highest_portfolio_concentration": [
+    {
+      "institution_id": 15133,
+      "institution_name": "FACULDADE JARDINS",
+      "enrollment_hhi": 0.749495,
+      "course_count": 21,
+      "enrollments": 1724
+    },
+    {
+      "institution_id": 18463,
+      "institution_name": "Faculdade UniFAHE",
+      "enrollment_hhi": 0.685503,
+      "course_count": 6,
+      "enrollments": 1204
+    },
+    {
+      "institution_id": 4597,
+      "institution_name": "FACULDADE FUTURA",
+      "enrollment_hhi": 0.675039,
+      "course_count": 6,
+      "enrollments": 1058
+    },
+    {
+      "institution_id": 1429,
+      "institution_name": "FACULDADE BATISTA DO RIO DE JANEIRO",
+      "enrollment_hhi": 0.657302,
+      "course_count": 5,
+      "enrollments": 1560
+    },
+    {
+      "institution_id": 15401,
+      "institution_name": "Faculdade FIPECAFI",
+      "enrollment_hhi": 0.65024,
+      "course_count": 5,
+      "enrollments": 1086
+    },
+    {
+      "institution_id": 351,
+      "institution_name": "FACULDADE DE CIÊNCIAS MÉDICAS DE MINAS GERAIS",
+      "enrollment_hhi": 0.636852,
+      "course_count": 5,
+      "enrollments": 3613
+    },
+    {
+      "institution_id": 1233,
+      "institution_name": "CENTRO UNIVERSITÁRIO UNIC",
+      "enrollment_hhi": 0.558087,
+      "course_count": 11,
+      "enrollments": 1414
+    },
+    {
+      "institution_id": 4594,
+      "institution_name": "FACULDADE CATÓLICA DE RONDONIA",
+      "enrollment_hhi": 0.518294,
+      "course_count": 5,
+      "enrollments": 1011
+    },
+    {
+      "institution_id": 452,
+      "institution_name": "CENTRO UNIVERSITÁRIO LUTERANO DE MANAUS",
+      "enrollment_hhi": 0.517651,
+      "course_count": 10,
+      "enrollments": 1277
+    },
+    {
+      "institution_id": 22248,
+      "institution_name": "FACULDADE SUCESSO",
+      "enrollment_hhi": 0.504862,
+      "course_count": 9,
+      "enrollments": 2233
+    }
+  ]
+}

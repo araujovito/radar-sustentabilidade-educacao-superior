@@ -30,3 +30,16 @@ def test_analytics_reconciles_ead_dimensions() -> None:
     assert "dimension_type = 4" not in analytics
     assert "FULL OUTER JOIN ead_students" in analytics
     assert "seat_occupancy_rate" in analytics
+
+
+def test_portfolio_view_calculates_hhi_from_enrollment_shares() -> None:
+    portfolio = (
+        PROJECT_ROOT
+        / "sql"
+        / "analytics"
+        / "035_institution_portfolio_2024.sql"
+    ).read_text(encoding="utf-8")
+
+    assert "POWER(" in portfolio
+    assert "enrollment_hhi" in portfolio
+    assert "PARTITION BY census_year, institution_id" in portfolio

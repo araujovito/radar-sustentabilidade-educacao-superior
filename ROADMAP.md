@@ -18,18 +18,19 @@
 
 ## Marco 2 — Banco analítico
 
-- [ ] Carregar uma amostra na camada `raw`.
-- [ ] Padronizar chaves, tipos, categorias e valores ausentes em `staging`.
-- [ ] Criar dimensões de tempo, instituição, curso e localidade.
-- [ ] Criar fatos de oferta, matrícula e fluxo.
-- [ ] Implementar testes de unicidade, integridade e reconciliação.
+- [x] Gerar a camada `raw` a partir do leiaute oficial.
+- [x] Padronizar chaves, tipos, categorias e valores ausentes em `staging`.
+- [x] Criar a visão analítica por instituição, curso e modalidade.
+- [x] Reconciliar oferta e alunos nas dimensões específicas da EAD.
+- [x] Implementar testes de unicidade, integridade e reconciliação.
+- [ ] Executar a carga completa no PostgreSQL local.
 
 ## Marco 3 — Métricas e hipóteses
 
-- [ ] Definir taxa de ocupação com denominadores comparáveis.
+- [x] Definir taxa de ocupação com denominadores comparáveis.
 - [ ] Construir indicador de capacidade ociosa persistente.
 - [ ] Medir volatilidade da demanda e persistência do crescimento.
-- [ ] Calcular concentração do portfólio por instituição.
+- [x] Calcular concentração do portfólio por instituição.
 - [ ] Estudar transição e dependência entre presencial e EAD.
 - [ ] Validar uma medida de eficiência de conclusão com defasagem.
 

@@ -110,3 +110,16 @@ O planejamento detalhado está em [ROADMAP.md](ROADMAP.md).
 - [Catálogo legível por máquina](config/sources.toml)
 - [Achados de qualidade de 2024](docs/2024_quality_findings.md)
 - [Modelo SQL do MVP](docs/sql_model.md)
+- [Achados analíticos do MVP 2024](docs/mvp_2024_findings.md)
+
+## Executar o MVP 2024
+
+Após extrair os dois CSVs do pacote oficial, gere o resumo reproduzível:
+
+```bash
+radar build-mvp
+```
+
+O comando processa o arquivo de cursos em blocos, reconcilia as dimensões da
+EAD e grava `reports/2024/mvp_summary.json`. Os microdados permanecem fora do
+Git.
