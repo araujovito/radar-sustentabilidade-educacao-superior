@@ -1,0 +1,83 @@
+# Radar de Sustentabilidade da Educação Superior
+
+Projeto analítico em Python e SQL para investigar a capacidade, a conversão, a
+eficiência e a sustentabilidade da oferta de educação superior no Brasil.
+
+## Problema
+
+A expansão de vagas não significa, isoladamente, expansão sustentável. Este
+projeto busca identificar onde a oferta consegue converter capacidade em
+ingressantes, permanência e conclusão, além de reconhecer sinais de
+deterioração antes que apareçam nos indicadores mais óbvios.
+
+Pergunta central:
+
+> Onde a oferta de cursos superiores cresce sem converter vagas em alunos,
+> permanência e concluintes, e quais sinais antecipam uma deterioração?
+
+## Entregas planejadas
+
+- pipeline reproduzível para obtenção e validação dos dados oficiais;
+- banco analítico PostgreSQL com histórico por instituição, curso e ano;
+- métricas documentadas de ocupação, eficiência, concentração e volatilidade;
+- análise exploratória orientada por hipóteses;
+- modelo temporal de alerta de risco, sem vazamento de informação;
+- painel de decisão com explicações por curso e instituição.
+
+## Fontes oficiais
+
+- Microdados do Censo da Educação Superior — Inep;
+- Indicadores de fluxo e trajetória da educação superior — Inep;
+- indicadores de qualidade, como Enade, IDD e CPC, quando o cruzamento for
+  metodologicamente válido;
+- dados cadastrais do sistema e-MEC, como fonte complementar.
+
+Os arquivos brutos não serão armazenados no GitHub. O pipeline registrará URL,
+data de obtenção, tamanho e checksum de cada arquivo.
+
+## Arquitetura inicial
+
+```text
+fonte oficial
+    -> data/raw
+    -> validação e padronização em Python
+    -> PostgreSQL: raw
+    -> PostgreSQL: staging
+    -> PostgreSQL: analytics
+    -> notebooks, modelos e painel
+```
+
+## Estrutura
+
+```text
+data/          dados locais ignorados pelo Git
+docs/          decisões analíticas e metodologia
+sql/           schemas, transformações e consultas
+src/           pacote Python do projeto
+tests/         testes automatizados
+```
+
+## Início rápido
+
+Requisitos: Python 3.11 ou superior, Docker e Docker Compose.
+
+```bash
+python -m venv .venv
+python -m pip install --upgrade pip
+python -m pip install -e ".[dev]"
+docker compose up -d db
+pytest
+```
+
+Copie `.env.example` para `.env` antes de executar componentes que acessam o
+banco. As credenciais fornecidas são apenas para desenvolvimento local.
+
+## Princípios analíticos
+
+- separar descrição, previsão e inferência causal;
+- evitar conclusões individuais a partir de dados agregados;
+- usar validação temporal nos modelos preditivos;
+- documentar denominadores, defasagens e limitações de cada métrica;
+- manter todas as transformações reproduzíveis.
+
+O planejamento detalhado está em [ROADMAP.md](ROADMAP.md).
