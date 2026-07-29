@@ -2,6 +2,7 @@
 
 from radar_sustentabilidade.ingestion.archive import (
     UnsafeArchiveError,
+    extract_csv_members,
     inventory_zip,
 )
 from radar_sustentabilidade.ingestion.catalog import Source, load_source
@@ -15,6 +16,7 @@ __all__ = [
     "Source",
     "UnsafeArchiveError",
     "download_source",
+    "extract_csv_members",
     "import_local_source",
     "inventory_zip",
     "load_source",

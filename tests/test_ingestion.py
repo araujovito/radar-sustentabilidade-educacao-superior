@@ -11,6 +11,7 @@ import pytest
 
 from radar_sustentabilidade.ingestion.archive import (
     UnsafeArchiveError,
+    extract_csv_members,
     inventory_zip,
 )
 from radar_sustentabilidade.ingestion.catalog import Source, load_source
@@ -209,3 +210,18 @@ def test_inventory_rejects_path_traversal(tmp_path: Path) -> None:
 
     with pytest.raises(UnsafeArchiveError, match="Caminho inseguro"):
         inventory_zip(archive_path)
+
+
+def test_extracts_only_csv_members(tmp_path: Path) -> None:
+    archive_path = tmp_path / "package.zip"
+    with ZipFile(archive_path, "w") as archive:
+        archive.writestr("dados/courses.csv", "a;b\n1;2\n")
+        archive.writestr("docs/readme.pdf", b"pdf")
+
+    output_directory = tmp_path / "interim"
+    manifest = extract_csv_members(archive_path, output_directory)
+
+    assert manifest["extracted_file_count"] == 1
+    assert (output_directory / "courses.csv").is_file()
+    assert not (output_directory / "readme.pdf").exists()
+    assert len(manifest["files"][0]["sha256"]) == 64

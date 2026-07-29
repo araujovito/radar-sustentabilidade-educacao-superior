@@ -6,7 +6,10 @@ from pathlib import Path
 import typer
 
 from radar_sustentabilidade import __version__
-from radar_sustentabilidade.ingestion.archive import write_inventory
+from radar_sustentabilidade.ingestion.archive import (
+    extract_csv_members,
+    write_inventory,
+)
 from radar_sustentabilidade.ingestion.catalog import load_source
 from radar_sustentabilidade.ingestion.download import (
     download_source,
@@ -14,6 +17,7 @@ from radar_sustentabilidade.ingestion.download import (
 )
 from radar_sustentabilidade.ingestion.profile import write_package_profile
 from radar_sustentabilidade.quality import write_course_quality_profile
+from radar_sustentabilidade.sqlgen import generate_raw_sql
 
 app = typer.Typer(no_args_is_help=True)
 
@@ -88,6 +92,29 @@ def profile_quality(
     result = write_course_quality_profile(archive, output)
     typer.echo(
         f"{result['row_count']} linhas perfiladas; relatório em {output}"
+    )
+
+
+@app.command("generate-sql")
+def generate_sql(
+    profile: Path = Path("reports/2024/source_profile.json"),
+    output_dir: Path = Path("sql/generated"),
+) -> None:
+    """Gera o DDL raw e o script psql a partir do perfil real."""
+    generated = generate_raw_sql(profile, output_dir)
+    for path in generated:
+        typer.echo(path)
+
+
+@app.command("extract-tables")
+def extract_tables(
+    archive: Path,
+    output_dir: Path = Path("data/interim/censo_superior_2024"),
+) -> None:
+    """Extrai somente os CSVs do pacote e registra seus hashes."""
+    manifest = extract_csv_members(archive, output_dir)
+    typer.echo(
+        f"{manifest['extracted_file_count']} tabelas extraídas em {output_dir}"
     )
 
 

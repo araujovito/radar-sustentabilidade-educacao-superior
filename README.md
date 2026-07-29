@@ -108,3 +108,5 @@ O planejamento detalhado está em [ROADMAP.md](ROADMAP.md).
 - [Recorte analítico inicial](docs/scope.md)
 - [Catálogo inicial de fontes](docs/data_catalog.md)
 - [Catálogo legível por máquina](config/sources.toml)
+- [Achados de qualidade de 2024](docs/2024_quality_findings.md)
+- [Modelo SQL do MVP](docs/sql_model.md)

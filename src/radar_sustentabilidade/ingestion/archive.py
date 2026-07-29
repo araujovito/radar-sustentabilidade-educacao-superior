@@ -1,5 +1,6 @@
 """Inventário seguro de arquivos ZIP."""
 
+import hashlib
 import json
 import os
 import stat
@@ -63,3 +64,57 @@ def write_inventory(archive_path: Path, output_path: Path) -> dict:
     )
     os.replace(temporary_path, output_path)
     return inventory
+
+
+def extract_csv_members(archive_path: Path, output_directory: Path) -> dict:
+    """Extrai somente CSVs seguros e registra hashes SHA-256."""
+    output_directory.mkdir(parents=True, exist_ok=True)
+    extracted = []
+
+    with ZipFile(archive_path) as archive:
+        csv_members = [
+            member
+            for member in archive.infolist()
+            if not member.is_dir()
+            and member.filename.lower().endswith(".csv")
+        ]
+        for member in csv_members:
+            _validate_member(member)
+            output_path = output_directory / Path(member.filename).name
+            if output_path.exists():
+                raise FileExistsError(f"Destino já existe: {output_path}")
+
+            temporary_path = output_path.with_suffix(
+                output_path.suffix + ".part"
+            )
+            digest = hashlib.sha256()
+            with archive.open(member) as source, temporary_path.open(
+                "wb"
+            ) as destination:
+                while chunk := source.read(8 * 1024 * 1024):
+                    destination.write(chunk)
+                    digest.update(chunk)
+            os.replace(temporary_path, output_path)
+            extracted.append(
+                {
+                    "member_path": member.filename,
+                    "file_name": output_path.name,
+                    "file_size_bytes": output_path.stat().st_size,
+                    "sha256": digest.hexdigest(),
+                }
+            )
+
+    manifest = {
+        "schema_version": 1,
+        "archive_name": archive_path.name,
+        "extracted_file_count": len(extracted),
+        "files": extracted,
+    }
+    manifest_path = output_directory / "extraction_manifest.json"
+    temporary_manifest = manifest_path.with_suffix(".json.tmp")
+    temporary_manifest.write_text(
+        json.dumps(manifest, ensure_ascii=False, indent=2) + "\n",
+        encoding="utf-8",
+    )
+    os.replace(temporary_manifest, manifest_path)
+    return manifest
