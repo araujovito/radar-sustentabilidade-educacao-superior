@@ -14,7 +14,10 @@ from radar_sustentabilidade.ingestion.archive import (
     inventory_zip,
 )
 from radar_sustentabilidade.ingestion.catalog import Source, load_source
-from radar_sustentabilidade.ingestion.download import download_source
+from radar_sustentabilidade.ingestion.download import (
+    download_source,
+    import_local_source,
+)
 
 
 class FakeResponse(BytesIO):
@@ -150,6 +153,37 @@ def test_transient_error_is_retried(tmp_path: Path) -> None:
 def test_attempt_count_must_be_positive(tmp_path: Path) -> None:
     with pytest.raises(ValueError, match="max_attempts"):
         download_source(make_source(), tmp_path, max_attempts=0)
+
+
+def test_imports_manually_downloaded_file(tmp_path: Path) -> None:
+    input_path = tmp_path / "manual.zip"
+    input_path.write_bytes(b"manual download")
+    data_root = tmp_path / "raw"
+    imported_at = datetime(2026, 7, 28, tzinfo=UTC)
+
+    manifest = import_local_source(
+        make_source(),
+        input_path,
+        data_root,
+        imported_at=imported_at,
+    )
+
+    target = data_root / "example" / "2024" / "example.zip"
+    assert target.read_bytes() == input_path.read_bytes()
+    assert manifest["status"] == "imported"
+    assert manifest["imported_from_file_name"] == "manual.zip"
+    assert str(tmp_path) not in json.dumps(manifest)
+
+
+def test_import_rejects_different_existing_file(tmp_path: Path) -> None:
+    input_path = tmp_path / "manual.zip"
+    input_path.write_bytes(b"new")
+    target = tmp_path / "raw" / "example" / "2024" / "example.zip"
+    target.parent.mkdir(parents=True)
+    target.write_bytes(b"old")
+
+    with pytest.raises(FileExistsError, match="conteúdo diferente"):
+        import_local_source(make_source(), input_path, tmp_path / "raw")
 
 
 def test_inventory_lists_members_without_extracting(tmp_path: Path) -> None:

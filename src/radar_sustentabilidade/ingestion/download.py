@@ -3,6 +3,7 @@
 import hashlib
 import json
 import os
+import shutil
 import time
 from collections.abc import Callable
 from datetime import UTC, datetime
@@ -126,6 +127,52 @@ def download_source(
         "retrieved_at": timestamp.isoformat(),
         "status": "downloaded",
         **response_metadata,
+    }
+    _write_manifest(manifest_path, manifest)
+    return manifest
+
+
+def import_local_source(
+    source: Source,
+    input_path: Path,
+    data_root: Path,
+    *,
+    imported_at: datetime | None = None,
+) -> dict:
+    """Importa um arquivo baixado manualmente e registra sua proveniência."""
+    if not input_path.is_file():
+        raise FileNotFoundError(f"Arquivo local não encontrado: {input_path}")
+
+    target_directory = data_root / source.source_id / str(source.reference_year)
+    target_directory.mkdir(parents=True, exist_ok=True)
+    final_path = target_directory / source.file_name
+    partial_path = final_path.with_suffix(final_path.suffix + ".part")
+    manifest_path = target_directory / "manifest.json"
+
+    input_hash = sha256_file(input_path)
+    if final_path.exists():
+        if sha256_file(final_path) != input_hash:
+            raise FileExistsError(
+                f"Destino existente possui conteúdo diferente: {final_path}"
+            )
+        status = "reused"
+    else:
+        shutil.copyfile(input_path, partial_path)
+        os.replace(partial_path, final_path)
+        status = "imported"
+
+    timestamp = imported_at or datetime.now(UTC)
+    manifest = {
+        "schema_version": 1,
+        "source_id": source.source_id,
+        "reference_year": source.reference_year,
+        "source_url": source.download_url,
+        "file_name": final_path.name,
+        "file_size_bytes": final_path.stat().st_size,
+        "sha256": input_hash,
+        "retrieved_at": timestamp.isoformat(),
+        "status": status,
+        "imported_from_file_name": input_path.name,
     }
     _write_manifest(manifest_path, manifest)
     return manifest

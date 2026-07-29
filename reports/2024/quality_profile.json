@@ -1,0 +1,241 @@
+{
+  "schema_version": 1,
+  "table_member": "microdados_censo_da_educacao_superior_2024/dados/MICRODADOS_CADASTRO_CURSOS_2024.CSV",
+  "row_count": 720349,
+  "column_subset": [
+    "NU_ANO_CENSO",
+    "TP_DIMENSAO",
+    "CO_REGIAO",
+    "CO_UF",
+    "CO_MUNICIPIO",
+    "CO_IES",
+    "CO_CURSO",
+    "TP_MODALIDADE_ENSINO",
+    "TP_NIVEL_ACADEMICO",
+    "TP_GRAU_ACADEMICO",
+    "QT_CURSO",
+    "QT_VG_TOTAL",
+    "QT_INSCRITO_TOTAL",
+    "QT_ING",
+    "QT_MAT",
+    "QT_CONC"
+  ],
+  "candidate_key": [
+    "TP_DIMENSAO",
+    "CO_IES",
+    "CO_CURSO",
+    "CO_MUNICIPIO",
+    "TP_MODALIDADE_ENSINO"
+  ],
+  "candidate_key_is_unique": true,
+  "rows_in_duplicated_candidate_key": 0,
+  "null_counts": {
+    "NU_ANO_CENSO": 0,
+    "TP_DIMENSAO": 0,
+    "CO_REGIAO": 11778,
+    "CO_UF": 11778,
+    "CO_MUNICIPIO": 11778,
+    "CO_IES": 0,
+    "CO_CURSO": 0,
+    "TP_MODALIDADE_ENSINO": 0,
+    "TP_NIVEL_ACADEMICO": 0,
+    "TP_GRAU_ACADEMICO": 2046,
+    "QT_CURSO": 0,
+    "QT_VG_TOTAL": 0,
+    "QT_INSCRITO_TOTAL": 0,
+    "QT_ING": 0,
+    "QT_MAT": 0,
+    "QT_CONC": 0
+  },
+  "academic_level_counts": {
+    "1": 720345,
+    "2": 4
+  },
+  "dimension_summary": [
+    {
+      "dimension": 1,
+      "label": "presencial_brasil",
+      "row_count": 34824,
+      "geography_complete_row_count": 34824,
+      "distinct_ies_count": 2444,
+      "distinct_course_count": 34824,
+      "modalities": [
+        1
+      ],
+      "academic_levels": [
+        1,
+        2
+      ],
+      "measures": {
+        "QT_CURSO": {
+          "non_null_row_count": 34824,
+          "non_zero_row_count": 34479,
+          "sum": 34479
+        },
+        "QT_VG_TOTAL": {
+          "non_null_row_count": 34824,
+          "non_zero_row_count": 31687,
+          "sum": 5075146
+        },
+        "QT_INSCRITO_TOTAL": {
+          "non_null_row_count": 34824,
+          "non_zero_row_count": 30718,
+          "sum": 8658561
+        },
+        "QT_ING": {
+          "non_null_row_count": 34824,
+          "non_zero_row_count": 29042,
+          "sum": 1663040
+        },
+        "QT_MAT": {
+          "non_null_row_count": 34824,
+          "non_zero_row_count": 32765,
+          "sum": 5037875
+        },
+        "QT_CONC": {
+          "non_null_row_count": 34824,
+          "non_zero_row_count": 27484,
+          "sum": 729246
+        }
+      }
+    },
+    {
+      "dimension": 2,
+      "label": "ead_alunos_por_localidade_brasil",
+      "row_count": 673756,
+      "geography_complete_row_count": 673747,
+      "distinct_ies_count": 791,
+      "distinct_course_count": 11255,
+      "modalities": [
+        2
+      ],
+      "academic_levels": [
+        1
+      ],
+      "measures": {
+        "QT_CURSO": {
+          "non_null_row_count": 673756,
+          "non_zero_row_count": 0,
+          "sum": 0
+        },
+        "QT_VG_TOTAL": {
+          "non_null_row_count": 673756,
+          "non_zero_row_count": 5,
+          "sum": 6925
+        },
+        "QT_INSCRITO_TOTAL": {
+          "non_null_row_count": 673756,
+          "non_zero_row_count": 5,
+          "sum": 3590
+        },
+        "QT_ING": {
+          "non_null_row_count": 673756,
+          "non_zero_row_count": 458564,
+          "sum": 3346116
+        },
+        "QT_MAT": {
+          "non_null_row_count": 673756,
+          "non_zero_row_count": 523293,
+          "sum": 5186852
+        },
+        "QT_CONC": {
+          "non_null_row_count": 673756,
+          "non_zero_row_count": 153384,
+          "sum": 604269
+        }
+      }
+    },
+    {
+      "dimension": 3,
+      "label": "ead_oferta_nacional",
+      "row_count": 11319,
+      "geography_complete_row_count": 0,
+      "distinct_ies_count": 793,
+      "distinct_course_count": 11319,
+      "modalities": [
+        2
+      ],
+      "academic_levels": [
+        1
+      ],
+      "measures": {
+        "QT_CURSO": {
+          "non_null_row_count": 11319,
+          "non_zero_row_count": 11297,
+          "sum": 11297
+        },
+        "QT_VG_TOTAL": {
+          "non_null_row_count": 11319,
+          "non_zero_row_count": 10583,
+          "sum": 18583348
+        },
+        "QT_INSCRITO_TOTAL": {
+          "non_null_row_count": 11319,
+          "non_zero_row_count": 10363,
+          "sum": 7060934
+        },
+        "QT_ING": {
+          "non_null_row_count": 11319,
+          "non_zero_row_count": 0,
+          "sum": 0
+        },
+        "QT_MAT": {
+          "non_null_row_count": 11319,
+          "non_zero_row_count": 0,
+          "sum": 0
+        },
+        "QT_CONC": {
+          "non_null_row_count": 11319,
+          "non_zero_row_count": 0,
+          "sum": 0
+        }
+      }
+    },
+    {
+      "dimension": 4,
+      "label": "ead_instituicoes_brasileiras_exterior",
+      "row_count": 450,
+      "geography_complete_row_count": 0,
+      "distinct_ies_count": 27,
+      "distinct_course_count": 450,
+      "modalities": [
+        2
+      ],
+      "academic_levels": [
+        1
+      ],
+      "measures": {
+        "QT_CURSO": {
+          "non_null_row_count": 450,
+          "non_zero_row_count": 0,
+          "sum": 0
+        },
+        "QT_VG_TOTAL": {
+          "non_null_row_count": 450,
+          "non_zero_row_count": 0,
+          "sum": 0
+        },
+        "QT_INSCRITO_TOTAL": {
+          "non_null_row_count": 450,
+          "non_zero_row_count": 0,
+          "sum": 0
+        },
+        "QT_ING": {
+          "non_null_row_count": 450,
+          "non_zero_row_count": 269,
+          "sum": 1457
+        },
+        "QT_MAT": {
+          "non_null_row_count": 450,
+          "non_zero_row_count": 350,
+          "sum": 2539
+        },
+        "QT_CONC": {
+          "non_null_row_count": 450,
+          "non_zero_row_count": 153,
+          "sum": 473
+        }
+      }
+    }
+  ]
+}

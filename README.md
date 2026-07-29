@@ -87,6 +87,12 @@ versionado. Para validar e inventariar um ZIP sem extrair seus membros:
 radar inventory caminho/arquivo.zip
 ```
 
+Se o arquivo foi obtido manualmente:
+
+```bash
+radar import-file inep_censo_superior_microdados_2024 caminho/arquivo.zip
+```
+
 ## Princípios analíticos
 
 - separar descrição, previsão e inferência causal;

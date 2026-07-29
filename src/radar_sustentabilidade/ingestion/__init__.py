@@ -5,12 +5,18 @@ from radar_sustentabilidade.ingestion.archive import (
     inventory_zip,
 )
 from radar_sustentabilidade.ingestion.catalog import Source, load_source
-from radar_sustentabilidade.ingestion.download import download_source
+from radar_sustentabilidade.ingestion.download import (
+    download_source,
+    import_local_source,
+)
+from radar_sustentabilidade.ingestion.profile import profile_package
 
 __all__ = [
     "Source",
     "UnsafeArchiveError",
     "download_source",
+    "import_local_source",
     "inventory_zip",
     "load_source",
+    "profile_package",
 ]
