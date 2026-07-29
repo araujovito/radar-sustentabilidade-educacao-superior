@@ -72,6 +72,21 @@ pytest
 Copie `.env.example` para `.env` antes de executar componentes que acessam o
 banco. As credenciais fornecidas são apenas para desenvolvimento local.
 
+## Aquisição reproduzível
+
+Para baixar a fonte catalogada de 2024:
+
+```bash
+radar download inep_censo_superior_microdados_2024
+```
+
+O comando grava o ZIP, o SHA-256 e os metadados em `data/raw`, que não é
+versionado. Para validar e inventariar um ZIP sem extrair seus membros:
+
+```bash
+radar inventory caminho/arquivo.zip
+```
+
 ## Princípios analíticos
 
 - separar descrição, previsão e inferência causal;

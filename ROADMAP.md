@@ -12,7 +12,7 @@
 
 - [x] Selecionar o recorte temporal inicial.
 - [x] Registrar os arquivos oficiais, URLs e localização dos dicionários.
-- [ ] Implementar download com retomada, checksum e idempotência.
+- [x] Implementar download com retomada, checksum e idempotência.
 - [ ] Criar relatório de qualidade por arquivo e ano.
 - [ ] Documentar mudanças de leiaute entre edições.
 

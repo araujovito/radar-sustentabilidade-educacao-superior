@@ -23,3 +23,10 @@ def test_version_command() -> None:
 
     assert result.exit_code == 0
     assert result.stdout.strip() == __version__
+
+
+def test_inventory_command_help() -> None:
+    result = runner.invoke(app, ["inventory", "--help"])
+
+    assert result.exit_code == 0
+    assert "Valida um ZIP" in result.stdout

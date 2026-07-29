@@ -20,9 +20,11 @@ build/
 data/raw/*
 data/interim/*
 data/processed/*
+data/manifests/*
 !data/raw/.gitkeep
 !data/interim/.gitkeep
 !data/processed/.gitkeep
+!data/manifests/.gitkeep
 
 # Editors and operating systems
 .idea/
