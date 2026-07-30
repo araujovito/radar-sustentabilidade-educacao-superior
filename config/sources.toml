@@ -45,6 +45,141 @@ documentation_location = "inside_archive"
 documentation_notes = "Primeira edição da série histórica após o gate de qualidade de 2024. Nomes, tamanhos e checksums dos membros serão registrados após a aquisição."
 verified_on = 2026-07-29
 
+[[sources]]
+id = "inep_censo_superior_microdados_2022"
+title = "Microdados do Censo da Educação Superior 2022"
+publisher = "Instituto Nacional de Estudos e Pesquisas Educacionais Anísio Teixeira (Inep)"
+reference_year = 2022
+kind = "microdata_archive"
+format = "zip"
+role = "historical"
+status = "active"
+landing_url = "https://www.gov.br/inep/pt-br/acesso-a-informacao/dados-abertos/microdados/censo-da-educacao-superior"
+download_url = "https://download.inep.gov.br/microdados/microdados_censo_da_educacao_superior_2022.zip"
+documentation_location = "inside_archive"
+documentation_notes = "Segunda edição da série histórica. Nomes, tamanhos e checksums dos membros serão registrados após a aquisição."
+verified_on = 2026-07-30
+
+[[sources]]
+id = "inep_censo_superior_microdados_2021"
+title = "Microdados do Censo da Educação Superior 2021"
+publisher = "Instituto Nacional de Estudos e Pesquisas Educacionais Anísio Teixeira (Inep)"
+reference_year = 2021
+kind = "microdata_archive"
+format = "zip"
+role = "historical"
+status = "active"
+landing_url = "https://www.gov.br/inep/pt-br/acesso-a-informacao/dados-abertos/microdados/censo-da-educacao-superior"
+download_url = "https://download.inep.gov.br/microdados/microdados_censo_da_educacao_superior_2021.zip"
+documentation_location = "inside_archive"
+documentation_notes = "Terceira edição da série histórica. Nomes, tamanhos e checksums dos membros serão registrados após a aquisição."
+verified_on = 2026-07-30
+
+[[sources]]
+id = "inep_censo_superior_microdados_2020"
+title = "Microdados do Censo da Educação Superior 2020"
+publisher = "Instituto Nacional de Estudos e Pesquisas Educacionais Anísio Teixeira (Inep)"
+reference_year = 2020
+kind = "microdata_archive"
+format = "zip"
+role = "historical"
+status = "active"
+landing_url = "https://www.gov.br/inep/pt-br/acesso-a-informacao/dados-abertos/microdados/censo-da-educacao-superior"
+download_url = "https://download.inep.gov.br/microdados/microdados_censo_da_educacao_superior_2020.zip"
+documentation_location = "inside_archive"
+documentation_notes = "Quarta edição da série histórica. Nomes, tamanhos e checksums dos membros serão registrados após a aquisição."
+verified_on = 2026-07-30
+
+[[sources]]
+id = "inep_censo_superior_microdados_2019"
+title = "Microdados do Censo da Educação Superior 2019"
+publisher = "Instituto Nacional de Estudos e Pesquisas Educacionais Anísio Teixeira (Inep)"
+reference_year = 2019
+kind = "microdata_archive"
+format = "zip"
+role = "historical"
+status = "active"
+landing_url = "https://www.gov.br/inep/pt-br/acesso-a-informacao/dados-abertos/microdados/censo-da-educacao-superior"
+download_url = "https://download.inep.gov.br/microdados/microdados_censo_da_educacao_superior_2019.zip"
+documentation_location = "inside_archive"
+documentation_notes = "Quinta edição da série histórica. Nomes, tamanhos e checksums dos membros serão registrados após a aquisição."
+verified_on = 2026-07-30
+
+[[sources]]
+id = "inep_censo_superior_microdados_2018"
+title = "Microdados do Censo da Educação Superior 2018"
+publisher = "Instituto Nacional de Estudos e Pesquisas Educacionais Anísio Teixeira (Inep)"
+reference_year = 2018
+kind = "microdata_archive"
+format = "zip"
+role = "historical"
+status = "active"
+landing_url = "https://www.gov.br/inep/pt-br/acesso-a-informacao/dados-abertos/microdados/censo-da-educacao-superior"
+download_url = "https://download.inep.gov.br/microdados/microdados_censo_da_educacao_superior_2018.zip"
+documentation_location = "inside_archive"
+documentation_notes = "Sexta edição da série histórica. Nomes, tamanhos e checksums dos membros serão registrados após a aquisição."
+verified_on = 2026-07-30
+
+[[sources]]
+id = "inep_censo_superior_microdados_2017"
+title = "Microdados do Censo da Educação Superior 2017"
+publisher = "Instituto Nacional de Estudos e Pesquisas Educacionais Anísio Teixeira (Inep)"
+reference_year = 2017
+kind = "microdata_archive"
+format = "zip"
+role = "historical"
+status = "active"
+landing_url = "https://www.gov.br/inep/pt-br/acesso-a-informacao/dados-abertos/microdados/censo-da-educacao-superior"
+download_url = "https://download.inep.gov.br/microdados/microdados_censo_da_educacao_superior_2017.zip"
+documentation_location = "inside_archive"
+documentation_notes = "Sétima edição da série histórica. Nomes, tamanhos e checksums dos membros serão registrados após a aquisição."
+verified_on = 2026-07-30
+
+[[sources]]
+id = "inep_censo_superior_microdados_2016"
+title = "Microdados do Censo da Educação Superior 2016"
+publisher = "Instituto Nacional de Estudos e Pesquisas Educacionais Anísio Teixeira (Inep)"
+reference_year = 2016
+kind = "microdata_archive"
+format = "zip"
+role = "historical"
+status = "active"
+landing_url = "https://www.gov.br/inep/pt-br/acesso-a-informacao/dados-abertos/microdados/censo-da-educacao-superior"
+download_url = "https://download.inep.gov.br/microdados/microdados_censo_da_educacao_superior_2016.zip"
+documentation_location = "inside_archive"
+documentation_notes = "Oitava edição da série histórica. Nomes, tamanhos e checksums dos membros serão registrados após a aquisição."
+verified_on = 2026-07-30
+
+[[sources]]
+id = "inep_censo_superior_microdados_2015"
+title = "Microdados do Censo da Educação Superior 2015"
+publisher = "Instituto Nacional de Estudos e Pesquisas Educacionais Anísio Teixeira (Inep)"
+reference_year = 2015
+kind = "microdata_archive"
+format = "zip"
+role = "historical"
+status = "active"
+landing_url = "https://www.gov.br/inep/pt-br/acesso-a-informacao/dados-abertos/microdados/censo-da-educacao-superior"
+download_url = "https://download.inep.gov.br/microdados/microdados_censo_da_educacao_superior_2015.zip"
+documentation_location = "inside_archive"
+documentation_notes = "Nona edição da série histórica. Nomes, tamanhos e checksums dos membros serão registrados após a aquisição."
+verified_on = 2026-07-30
+
+[[sources]]
+id = "inep_censo_superior_microdados_2014"
+title = "Microdados do Censo da Educação Superior 2014"
+publisher = "Instituto Nacional de Estudos e Pesquisas Educacionais Anísio Teixeira (Inep)"
+reference_year = 2014
+kind = "microdata_archive"
+format = "zip"
+role = "historical"
+status = "active"
+landing_url = "https://www.gov.br/inep/pt-br/acesso-a-informacao/dados-abertos/microdados/censo-da-educacao-superior"
+download_url = "https://download.inep.gov.br/microdados/microdados_censo_da_educacao_superior_2014.zip"
+documentation_location = "inside_archive"
+documentation_notes = "Décima edição da série histórica; primeiro ano do recorte planejado. Nomes, tamanhos e checksums dos membros serão registrados após a aquisição."
+verified_on = 2026-07-30
+
 [historical_series]
 id = "inep_censo_superior_microdados"
 publisher = "Instituto Nacional de Estudos e Pesquisas Educacionais Anísio Teixeira (Inep)"
@@ -52,5 +187,5 @@ start_year = 2014
 end_year = 2024
 landing_url = "https://www.gov.br/inep/pt-br/acesso-a-informacao/dados-abertos/microdados/censo-da-educacao-superior"
 download_url_template = "https://download.inep.gov.br/microdados/microdados_censo_da_educacao_superior_{year}.zip"
-activation_stage = "after_2024_quality_gate"
+activation_stage = "acquired_and_profiled"
 notes = "Cada edição deverá ser validada individualmente. O padrão de URL não garante que leiautes, nomes internos ou definições sejam idênticos entre os anos."

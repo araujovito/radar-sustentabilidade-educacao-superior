@@ -8,6 +8,89 @@ entre edições consecutivas antes de qualquer união longitudinal. Uma coluna s
 é tratada como comparável entre anos quando o nome, a posição relativa e o
 dicionário de dados concordam.
 
+## Cobertura da série
+
+Onze edições adquiridas, cada uma com checksum, manifesto e perfil próprios
+(`reports/{ano}/source_profile.json`). O MD5 de todas as tabelas confere com o
+controle distribuído pelo Inep.
+
+| Ano | Tabela de cursos | Linhas | Colunas | Tabela de IES | Linhas | Colunas |
+|---:|---|---:|---:|---|---:|---:|
+| 2014 | `MICRODADOS_CADASTRO_CURSOS_2014` | 73.569 | 200 | `MICRODADOS_CADASTRO_IES_2014` | 2.368 | 81 |
+| 2015 | `MICRODADOS_CADASTRO_CURSOS_2015` | 81.156 | 200 | `MICRODADOS_CADASTRO_IES_2015` | 2.364 | 81 |
+| 2016 | `MICRODADOS_CADASTRO_CURSOS_2016` | 92.866 | 200 | `MICRODADOS_CADASTRO_IES_2016` | 2.407 | 81 |
+| 2017 | `MICRODADOS_CADASTRO_CURSOS_2017` | 119.798 | 200 | `MICRODADOS_CADASTRO_IES_2017` | 2.448 | 81 |
+| 2018 | `MICRODADOS_CADASTRO_CURSOS_2018` | 182.892 | 200 | `MICRODADOS_CADASTRO_IES_2018` | 2.537 | 81 |
+| 2019 | `MICRODADOS_CADASTRO_CURSOS_2019` | 253.139 | 200 | `MICRODADOS_CADASTRO_IES_2019` | 2.608 | 81 |
+| 2020 | `MICRODADOS_CADASTRO_CURSOS_2020` | 344.691 | 200 | `MICRODADOS_CADASTRO_IES_2020` | 2.457 | 81 |
+| 2021 | `MICRODADOS_CADASTRO_CURSOS_2021` | 444.786 | 200 | `MICRODADOS_CADASTRO_IES_2021` | 2.574 | 84 |
+| 2022 | `MICRODADOS_CADASTRO_CURSOS_2022` | 573.019 | 200 | `MICRODADOS_ED_SUP_IES_2022` | 2.595 | 81 |
+| 2023 | `MICRODADOS_CADASTRO_CURSOS_2023` | 671.610 | 202 | `MICRODADOS_ED_SUP_IES_2023` | 2.580 | 84 |
+| 2024 | `MICRODADOS_CADASTRO_CURSOS_2024` | 720.349 | 223 | `MICRODADOS_ED_SUP_IES_2024` | 2.561 | 84 |
+
+A tabela de IES muda de nome em 2022: `MICRODADOS_CADASTRO_IES_{ano}` passa a
+`MICRODADOS_ED_SUP_IES_{ano}`. O pipeline deve localizar as tabelas por
+conteúdo e padrão, nunca por nome fixo.
+
+As linhas de cursos crescem de 73.569 para 720.349 — quase dez vezes. Isso é
+expansão da EAD por localidade (dimensão 2), não crescimento equivalente da
+oferta: a dimensão 1 (presencial) vai apenas de 31.905 a 34.824 no mesmo
+intervalo.
+
+## Estabilidade das dimensões
+
+`TP_DIMENSAO` existe em todas as onze edições, com a mesma semântica usada na
+reconciliação de 2024. A dimensão 4 (EAD de IES brasileiras no exterior) só
+passa a existir em 2017:
+
+| Ano | Dim. 1 | Dim. 2 | Dim. 3 | Dim. 4 |
+|---:|---:|---:|---:|---:|
+| 2014 | 31.905 | 40.296 | 1.368 | — |
+| 2015 | 32.397 | 47.283 | 1.476 | — |
+| 2016 | 33.031 | 58.171 | 1.664 | — |
+| 2017 | 33.581 | 84.085 | 2.112 | 20 |
+| 2018 | 35.076 | 144.549 | 3.180 | 87 |
+| 2021 | 35.750 | 401.088 | 7.624 | 324 |
+| 2022 | 36.089 | 527.328 | 9.207 | 395 |
+
+A regra de reconciliação da EAD (vagas e inscrições da dimensão 3; alunos da
+dimensão 2; dimensão 4 fora do recorte brasileiro) vale para toda a série. A
+ausência da dimensão 4 antes de 2017 não afeta o recorte, que já a exclui.
+
+## Resumo das mudanças de leiaute
+
+Apenas quatro transições em onze anos alteram colunas. As demais são estáveis.
+
+| Transição | Tabela | Mudança |
+|---|---|---|
+| 2019 → 2020 | cursos | `CO_CINE_ROTULO` grafada como `CO_CINE_ROTULO2` |
+| 2020 → 2021 | cursos | nome volta a `CO_CINE_ROTULO` |
+| 2020 → 2021 | IES | entram `CO_LOCAL_OFERTA`, `NO_LOCAL_OFERTA`, `CO_PROJETO` |
+| 2021 → 2022 | IES | as três colunas acima saem novamente |
+| 2022 → 2023 | cursos | entram `IN_COMUNITARIA`, `IN_CONFESSIONAL` |
+| 2022 → 2023 | IES | entram `TP_REDE`, `IN_COMUNITARIA`, `IN_CONFESSIONAL` |
+| 2023 → 2024 | cursos | `QT_*_RVETNICO` sai; entram 24 colunas de reserva de vagas |
+
+### `CO_CINE_ROTULO2` (2020)
+
+O pacote de 2020 grafa a coluna com um dígito extra no fim. Em 2019 e em 2021
+o nome é `CO_CINE_ROTULO`. Trata-se de erro de publicação isolado, não de
+mudança de conceito: a união longitudinal deve normalizar o nome, e o
+dicionário de 2020 confirma a intenção ao listar apenas `CO_CINE_ROTULO`.
+
+### Colunas de local de oferta na tabela de IES (2021)
+
+Somente em 2021 a tabela de IES traz `CO_LOCAL_OFERTA`, `NO_LOCAL_OFERTA` e
+`CO_PROJETO` — nenhuma delas presente no dicionário daquele ano. Como aparecem
+em uma única edição e sem documentação, não devem entrar na camada analítica
+longitudinal; ficam preservadas apenas em `raw`.
+
+### Categorização administrativa mais fina (2023)
+
+`TP_REDE`, `IN_COMUNITARIA` e `IN_CONFESSIONAL` passam a existir em 2023.
+Indicadores por natureza administrativa só são comparáveis em toda a série se
+derivados de `TP_CATEGORIA_ADMINISTRATIVA`, presente desde 2014.
+
 ## 2023 → 2024
 
 ### Estrutura do pacote
@@ -62,6 +145,25 @@ Isso confirma a nota já registrada em
 - O dicionário de 2023 não lista nenhuma variável ausente do CSV nem sobra do
   CSV ausente do dicionário — mais consistente que o de 2024, que lista três
   variáveis inexistentes no cabeçalho real (ver achados de 2024).
+
+## Conclusão para a camada longitudinal
+
+A série 2014–2024 é viável. As 200 colunas presentes em 2014 seguem presentes
+em 2024, com uma única exceção real de conceito (`QT_*_RVETNICO`) e uma de
+grafia (`CO_CINE_ROTULO2`). As medidas centrais do MVP — vagas, inscrições,
+ingressantes, matrículas e concluintes — e as chaves `NU_ANO_CENSO`, `CO_IES`,
+`CO_CURSO`, `CO_MUNICIPIO`, `TP_MODALIDADE_ENSINO` e `TP_DIMENSAO` existem em
+todas as edições.
+
+Regras que a união longitudinal deve seguir:
+
+1. localizar tabelas por padrão de conteúdo, não por nome fixo;
+2. unir por nome de coluna normalizado, nunca por posição ordinal;
+3. normalizar `CO_CINE_ROTULO2` para `CO_CINE_ROTULO`;
+4. restringir o mart longitudinal à interseção documentada de colunas;
+5. manter fora do mart as colunas presentes em uma única edição;
+6. tratar reserva de vagas por critério étnico/racial como série interrompida
+   em 2024, não como continuidade.
 
 ## Próximas edições
 
