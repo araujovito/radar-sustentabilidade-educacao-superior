@@ -43,7 +43,7 @@
 - [x] Estabelecer modelo de referência interpretável.
 - [x] Comparar modelos e calibrar probabilidades.
 - [x] Avaliar desempenho fora do tempo e `precision@k`.
-- [ ] Produzir explicações por previsão e análise de estabilidade.
+- [x] Produzir explicações por previsão e análise de estabilidade.
 
 ## Marco 5 — Produto de portfólio
 

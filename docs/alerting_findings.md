@@ -132,6 +132,96 @@ entre si, e o Censo é agregado. A intensidade de conclusão com sinal positivo,
 por exemplo, provavelmente reflete ofertas em encerramento, que concluem turmas
 sem repor ingressantes — não que concluir mais cause deterioração.
 
+## Explicações por previsão
+
+Na regressão logística a decomposição é **exata**, não aproximada: o log-odds é
+a soma do intercepto com o produto de cada coeficiente pelo valor padronizado
+do atributo. Isso dispensa métodos de atribuição aproximada e permite auditar
+cada alerta. Um teste verifica a identidade numericamente.
+
+Entre as 20 ofertas de maior risco previsto no teste, 14 deterioraram de fato.
+A explicação delas segue um padrão único e legível — exemplo real:
+
+```text
+IES 1893, curso 51149, presencial, 2022
+probabilidade 0,997   observado: deteriorou
+log-odds 5,71 = intercepto -2,83 + contribuições
+
+  graduation_intensity          valor +5,51 sd   contribuição +3,48
+  demand_volatility_to_date     valor +4,28 sd   contribuição +2,38
+  rede privada                                   contribuição +0,73
+  privada com fins lucrativos                    contribuição +0,60
+  current_low_occupancy_streak   valor +5,02 sd  contribuição +0,45
+```
+
+O atributo dominante é a intensidade de conclusão. Ela é limitada ao intervalo
+de 0 a 1, com mediana 0,134 e percentil 99 em 0,765. Um valor igual a 1
+significa que a oferta formou **toda** a turma matriculada sem reposição de
+ingressantes — estado terminal, não desempenho. É por isso que aparece a mais
+de cinco desvios padrão e domina a explicação.
+
+Isso confirma a hipótese registrada na seção de coeficientes: a intensidade de
+conclusão com sinal positivo identifica ofertas em encerramento, não sucesso
+acadêmico que causaria deterioração.
+
+**Ressalva operacional:** as 20 primeiras concentram-se em poucas instituições
+e repetem os mesmos cursos em anos diferentes. Uma lista de auditoria precisaria
+de regra de diversificação, ou uma única instituição consumiria toda a
+capacidade de análise.
+
+## Estabilidade
+
+O modelo foi retreinado em janelas deslizantes de três anos dentro do treino,
+sempre avaliado no mesmo teste de 2021-2022.
+
+| Janela de treino | AUC | Precisão média | p@1000 |
+|---|---:|---:|---:|
+| 2016-2018 | 0,806 | 0,523 | 0,802 |
+| 2017-2019 | 0,810 | 0,534 | 0,834 |
+| 2018-2020 | 0,816 | 0,544 | 0,841 |
+
+O desempenho é estável e melhora levemente com janelas mais recentes, o que é
+esperado: elas estão mais próximas do período de teste.
+
+A sobreposição das 1.000 ofertas de maior risco entre janelas consecutivas,
+medida por índice de Jaccard, é 0,85 e 0,78. O modelo aponta substancialmente
+as mesmas ofertas independentemente de quais três anos o treinaram.
+
+### Instabilidade de coeficientes: onde ela é e onde não é
+
+Quatro atributos trocam de sinal entre janelas. A leitura ingênua seria
+concluir que o modelo é frágil. A magnitude mostra o contrário:
+
+| Trocam de sinal | maior valor absoluto |
+|---|---:|
+| Categoria administrativa 2 (pública estadual) | 0,220 |
+| `years_observed_to_date` | 0,170 |
+| `occupancy_rate` | 0,133 |
+| `institution_offer_count` | 0,125 |
+
+| Sinal estável | menor valor absoluto |
+|---|---:|
+| `enrollments` | 1,265 |
+| `graduation_intensity` | 0,584 |
+| `demand_volatility_to_date` | 0,548 |
+| Rede privada | 0,484 |
+
+A separação é limpa: tudo que troca de sinal tem coeficiente **menor que
+0,22**, e tudo que é estável tem coeficiente **maior que 0,46**. Os atributos
+instáveis oscilam em torno de zero porque carregam pouco sinal próprio, não
+porque o modelo seja instável.
+
+A causa é colinearidade. Seis atributos medem ocupação — nível, defasagem,
+variação, média acumulada, proporção de anos ociosos e sequência ociosa. Eles
+dividem um sinal compartilhado, e a atribuição entre eles é arbitrária mesmo
+quando o conjunto é informativo.
+
+**Consequência:** as contribuições individuais de atributos de ocupação em uma
+explicação não devem ser lidas como "o peso da ocupação". A soma do bloco é
+interpretável; a divisão dentro dele, não. Os atributos de coeficiente grande
+e estável — escala, intensidade de conclusão, volatilidade e natureza
+administrativa — sustentam leitura individual.
+
 ## Limitações
 
 - O gradient boosting sobreajusta mais: AUC 0,894 no treino contra 0,848 no

@@ -280,6 +280,173 @@ def coefficient_table(model: Pipeline) -> list[dict]:
     return sorted(rows, key=lambda row: abs(row["coefficient"]), reverse=True)
 
 
+def explain_predictions(
+    model: Pipeline,
+    features: pd.DataFrame,
+    top_n: int = 5,
+) -> list[dict]:
+    """Decompõe cada previsão nas contribuições de cada atributo.
+
+    Na regressão logística a decomposição é exata, não aproximada: o log-odds
+    é a soma do intercepto com o produto de cada coeficiente pelo valor
+    transformado do atributo. Isso dispensa métodos de atribuição aproximada e
+    torna a explicação auditável.
+
+    A contribuição diz o que empurrou aquela previsão, não o que causa
+    deterioração: os atributos são correlacionados entre si.
+    """
+    preprocessor = model.named_steps["preprocessor"]
+    classifier = model.named_steps["classifier"]
+    names = preprocessor.get_feature_names_out()
+    transformed = preprocessor.transform(features)
+    coefficients = classifier.coef_[0]
+    intercept = float(classifier.intercept_[0])
+    contributions = transformed * coefficients
+
+    explanations = []
+    for position in range(len(features)):
+        row = contributions[position]
+        log_odds = intercept + float(row.sum())
+        order = np.argsort(-np.abs(row))[:top_n]
+        explanations.append(
+            {
+                "predicted_probability": float(
+                    1.0 / (1.0 + np.exp(-log_odds))
+                ),
+                "intercept": intercept,
+                "log_odds": log_odds,
+                "top_contributions": [
+                    {
+                        "feature": str(names[index]),
+                        "transformed_value": float(transformed[position, index]),
+                        "contribution": float(row[index]),
+                    }
+                    for index in order
+                ],
+            }
+        )
+    return explanations
+
+
+def rolling_window_stability(
+    frame: pd.DataFrame,
+    window_size: int = 3,
+    top_k: int = 1000,
+) -> dict:
+    """Mede a estabilidade do modelo ao deslizar a janela de treino.
+
+    Se pequenas mudanças nos anos de treino invertem sinais de coeficientes ou
+    trocam quase todas as ofertas de maior risco, o modelo não é confiável
+    para operação, mesmo com bom desempenho agregado.
+    """
+    train, test = split_frame(frame)
+    test_features = test[FEATURE_COLUMNS].astype("float64")
+    test_labels = test[LABEL_COLUMN].to_numpy(dtype=bool).astype(int)
+    train_years = sorted(set(train["reference_year"]))
+
+    windows = [
+        train_years[start : start + window_size]
+        for start in range(len(train_years) - window_size + 1)
+    ]
+    if len(windows) < 2:
+        raise ValueError("Estabilidade exige ao menos duas janelas de treino")
+
+    results = []
+    ranked_sets = []
+    coefficients_by_window = {}
+
+    for window in windows:
+        selected = train["reference_year"].isin(window).to_numpy()
+        model = build_reference_model()
+        model.fit(
+            train[FEATURE_COLUMNS].astype("float64")[selected],
+            train[LABEL_COLUMN].to_numpy(dtype=bool).astype(int)[selected],
+        )
+        scores = model.predict_proba(test_features)[:, 1]
+        label = f"{window[0]}-{window[-1]}"
+
+        for row in coefficient_table(model):
+            coefficients_by_window.setdefault(row["feature"], {})[label] = row[
+                "coefficient"
+            ]
+
+        order = np.argsort(-scores, kind="stable")[:top_k]
+        ranked_sets.append(set(order.tolist()))
+        results.append(
+            {
+                "window": label,
+                "roc_auc": float(roc_auc_score(test_labels, scores)),
+                "average_precision": float(
+                    average_precision_score(test_labels, scores)
+                ),
+                "precision_at_k": precision_at_k(
+                    test_labels, scores, sizes=(top_k,)
+                ).get(top_k),
+            }
+        )
+
+    overlaps = []
+    for index in range(len(ranked_sets) - 1):
+        current, following = ranked_sets[index], ranked_sets[index + 1]
+        union = current | following
+        overlaps.append(
+            {
+                "windows": (
+                    f"{results[index]['window']} vs "
+                    f"{results[index + 1]['window']}"
+                ),
+                "jaccard": float(len(current & following) / len(union)),
+            }
+        )
+
+    # A troca de sinal só é preocupante quando o coeficiente é grande. Um
+    # atributo que oscila em torno de zero troca de sinal por carregar pouco
+    # sinal próprio, tipicamente por colinearidade com atributos vizinhos — o
+    # que é diferente de um modelo frágil. A magnitude acompanha cada caso para
+    # que a distinção fique explícita.
+    sign_flips = sorted(
+        (
+            {
+                "feature": feature,
+                "max_absolute_coefficient": max(
+                    abs(value) for value in values.values()
+                ),
+                "coefficients": values,
+            }
+            for feature, values in coefficients_by_window.items()
+            if len({value > 0 for value in values.values()}) > 1
+        ),
+        key=lambda row: row["max_absolute_coefficient"],
+        reverse=True,
+    )
+
+    stable = sorted(
+        (
+            {
+                "feature": feature,
+                "min_absolute_coefficient": min(
+                    abs(value) for value in values.values()
+                ),
+                "coefficients": values,
+            }
+            for feature, values in coefficients_by_window.items()
+            if len({value > 0 for value in values.values()}) == 1
+        ),
+        key=lambda row: row["min_absolute_coefficient"],
+        reverse=True,
+    )
+
+    return {
+        "window_size": window_size,
+        "top_k": top_k,
+        "windows": results,
+        "consecutive_top_k_overlap": overlaps,
+        "coefficients_by_window": coefficients_by_window,
+        "sign_flipping_features": sign_flips,
+        "sign_stable_features": stable[:8],
+    }
+
+
 def split_frame(frame: pd.DataFrame) -> tuple[pd.DataFrame, pd.DataFrame]:
     """Separa treino e teste conforme a coluna definida em SQL."""
     train = frame[frame[SPLIT_COLUMN] == "treino"]
@@ -380,6 +547,24 @@ def run_experiment(frame: pd.DataFrame) -> dict:
     reference_scores = reference.predict_proba(test_features)[:, 1]
     comparison_scores = comparison.predict_proba(test_features)[:, 1]
 
+    # Explicações das ofertas de maior risco previsto: são exatamente as que um
+    # analista abriria primeiro, e portanto as que precisam ser auditáveis.
+    highest_risk = np.argsort(-reference_scores, kind="stable")[:20]
+    explanations = explain_predictions(
+        reference, test_features.iloc[highest_risk]
+    )
+    identifiers = test.iloc[highest_risk][
+        ["institution_id", "course_id", "teaching_modality", "reference_year"]
+    ].to_dict("records")
+    observed = test_labels[highest_risk].tolist()
+    for explanation, identifier, actual in zip(
+        explanations, identifiers, observed, strict=True
+    ):
+        explanation["offer"] = {
+            key: int(value) for key, value in identifier.items()
+        }
+        explanation["observed_deterioration"] = bool(actual)
+
     return {
         "schema_version": 1,
         "train_years": sorted(int(year) for year in set(train["reference_year"])),
@@ -407,6 +592,8 @@ def run_experiment(frame: pd.DataFrame) -> dict:
             if calibrated_scores is not None
             else []
         ),
+        "highest_risk_explanations": explanations,
+        "stability": rolling_window_stability(frame),
     }
 
 

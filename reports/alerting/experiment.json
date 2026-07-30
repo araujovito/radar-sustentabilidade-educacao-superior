@@ -512,5 +512,1053 @@
       "mean_predicted": 0.7014350661607001,
       "observed_rate": 0.6055335968379446
     }
-  ]
+  ],
+  "highest_risk_explanations": [
+    {
+      "predicted_probability": 0.9966903306718545,
+      "intercept": -2.830230564758242,
+      "log_odds": 5.707591837047639,
+      "top_contributions": [
+        {
+          "feature": "numeric__graduation_intensity",
+          "transformed_value": 5.512989745420257,
+          "contribution": 3.479224084939812
+        },
+        {
+          "feature": "numeric__demand_volatility_to_date",
+          "transformed_value": 4.284263265955293,
+          "contribution": 2.3782188645219446
+        },
+        {
+          "feature": "categorical__education_network_2.0",
+          "transformed_value": 1.0,
+          "contribution": 0.725623694267749
+        },
+        {
+          "feature": "categorical__administrative_category_4.0",
+          "transformed_value": 1.0,
+          "contribution": 0.6006962192899914
+        },
+        {
+          "feature": "numeric__current_low_occupancy_streak",
+          "transformed_value": 5.021393838827862,
+          "contribution": 0.4451911506384854
+        }
+      ],
+      "offer": {
+        "institution_id": 1893,
+        "course_id": 51149,
+        "teaching_modality": 1,
+        "reference_year": 2022
+      },
+      "observed_deterioration": true
+    },
+    {
+      "predicted_probability": 0.9962290054884977,
+      "intercept": -2.830230564758242,
+      "log_odds": 5.57663839351882,
+      "top_contributions": [
+        {
+          "feature": "numeric__graduation_intensity",
+          "transformed_value": 5.512989745420257,
+          "contribution": 3.479224084939812
+        },
+        {
+          "feature": "numeric__demand_volatility_to_date",
+          "transformed_value": 4.051096887246277,
+          "contribution": 2.248786883806725
+        },
+        {
+          "feature": "categorical__education_network_2.0",
+          "transformed_value": 1.0,
+          "contribution": 0.725623694267749
+        },
+        {
+          "feature": "categorical__administrative_category_4.0",
+          "transformed_value": 1.0,
+          "contribution": 0.6006962192899914
+        },
+        {
+          "feature": "numeric__current_low_occupancy_streak",
+          "transformed_value": 5.021393838827862,
+          "contribution": 0.4451911506384854
+        }
+      ],
+      "offer": {
+        "institution_id": 1893,
+        "course_id": 51142,
+        "teaching_modality": 1,
+        "reference_year": 2022
+      },
+      "observed_deterioration": true
+    },
+    {
+      "predicted_probability": 0.9951322080722567,
+      "intercept": -2.830230564758242,
+      "log_odds": 5.320235169417387,
+      "top_contributions": [
+        {
+          "feature": "numeric__graduation_intensity",
+          "transformed_value": 5.512989745420257,
+          "contribution": 3.479224084939812
+        },
+        {
+          "feature": "numeric__demand_volatility_to_date",
+          "transformed_value": 3.9284199454201647,
+          "contribution": 2.1806882168524506
+        },
+        {
+          "feature": "categorical__education_network_2.0",
+          "transformed_value": 1.0,
+          "contribution": 0.725623694267749
+        },
+        {
+          "feature": "categorical__administrative_category_4.0",
+          "transformed_value": 1.0,
+          "contribution": 0.6006962192899914
+        },
+        {
+          "feature": "numeric__current_low_occupancy_streak",
+          "transformed_value": 4.326618472631817,
+          "contribution": 0.3835931452559214
+        }
+      ],
+      "offer": {
+        "institution_id": 1893,
+        "course_id": 51149,
+        "teaching_modality": 1,
+        "reference_year": 2021
+      },
+      "observed_deterioration": true
+    },
+    {
+      "predicted_probability": 0.9946213705656547,
+      "intercept": -2.830230564758242,
+      "log_odds": 5.219928542904597,
+      "top_contributions": [
+        {
+          "feature": "numeric__graduation_intensity",
+          "transformed_value": 5.512989745420257,
+          "contribution": 3.479224084939812
+        },
+        {
+          "feature": "numeric__demand_volatility_to_date",
+          "transformed_value": 3.7028366950949247,
+          "contribution": 2.05546567375926
+        },
+        {
+          "feature": "categorical__education_network_2.0",
+          "transformed_value": 1.0,
+          "contribution": 0.725623694267749
+        },
+        {
+          "feature": "categorical__administrative_category_4.0",
+          "transformed_value": 1.0,
+          "contribution": 0.6006962192899914
+        },
+        {
+          "feature": "numeric__current_low_occupancy_streak",
+          "transformed_value": 4.326618472631817,
+          "contribution": 0.3835931452559214
+        }
+      ],
+      "offer": {
+        "institution_id": 1893,
+        "course_id": 51142,
+        "teaching_modality": 1,
+        "reference_year": 2021
+      },
+      "observed_deterioration": true
+    },
+    {
+      "predicted_probability": 0.9943476644727766,
+      "intercept": -2.830230564758242,
+      "log_odds": 5.170018081159165,
+      "top_contributions": [
+        {
+          "feature": "numeric__graduation_intensity",
+          "transformed_value": 5.512989745420257,
+          "contribution": 3.479224084939812
+        },
+        {
+          "feature": "numeric__demand_volatility_to_date",
+          "transformed_value": 4.303363633720025,
+          "contribution": 2.3888215871179996
+        },
+        {
+          "feature": "categorical__education_network_2.0",
+          "transformed_value": 1.0,
+          "contribution": 0.725623694267749
+        },
+        {
+          "feature": "categorical__administrative_category_4.0",
+          "transformed_value": 1.0,
+          "contribution": 0.6006962192899914
+        },
+        {
+          "feature": "numeric__enrollments",
+          "transformed_value": -0.21960593896583538,
+          "contribution": 0.3400925129819881
+        }
+      ],
+      "offer": {
+        "institution_id": 4518,
+        "course_id": 1322600,
+        "teaching_modality": 1,
+        "reference_year": 2021
+      },
+      "observed_deterioration": true
+    },
+    {
+      "predicted_probability": 0.9942475808817991,
+      "intercept": -2.830230564758242,
+      "log_odds": 5.152365768434393,
+      "top_contributions": [
+        {
+          "feature": "numeric__demand_volatility_to_date",
+          "transformed_value": 6.672171135753938,
+          "contribution": 3.703760081333529
+        },
+        {
+          "feature": "numeric__graduation_intensity",
+          "transformed_value": 5.512989745420257,
+          "contribution": 3.479224084939812
+        },
+        {
+          "feature": "numeric__years_observed_to_date",
+          "transformed_value": 2.7152398803848157,
+          "contribution": 0.43045814858665576
+        },
+        {
+          "feature": "numeric__enrollments",
+          "transformed_value": -0.203671109956261,
+          "contribution": 0.3154150563188169
+        },
+        {
+          "feature": "categorical__administrative_category_2.0",
+          "transformed_value": 1.0,
+          "contribution": 0.16023709987750567
+        }
+      ],
+      "offer": {
+        "institution_id": 719,
+        "course_id": 1269752,
+        "teaching_modality": 1,
+        "reference_year": 2022
+      },
+      "observed_deterioration": false
+    },
+    {
+      "predicted_probability": 0.9942336292672145,
+      "intercept": -2.830230564758242,
+      "log_odds": 5.149929325038618,
+      "top_contributions": [
+        {
+          "feature": "numeric__graduation_intensity",
+          "transformed_value": 5.512989745420257,
+          "contribution": 3.479224084939812
+        },
+        {
+          "feature": "numeric__demand_volatility_to_date",
+          "transformed_value": 3.4841510516372303,
+          "contribution": 1.9340720314021198
+        },
+        {
+          "feature": "categorical__education_network_2.0",
+          "transformed_value": 1.0,
+          "contribution": 0.725623694267749
+        },
+        {
+          "feature": "categorical__administrative_category_4.0",
+          "transformed_value": 1.0,
+          "contribution": 0.6006962192899914
+        },
+        {
+          "feature": "numeric__years_observed_to_date",
+          "transformed_value": 2.128429477843861,
+          "contribution": 0.3374286813657448
+        }
+      ],
+      "offer": {
+        "institution_id": 2827,
+        "course_id": 1135011,
+        "teaching_modality": 1,
+        "reference_year": 2022
+      },
+      "observed_deterioration": false
+    },
+    {
+      "predicted_probability": 0.9941842576130515,
+      "intercept": -2.830230564758242,
+      "log_odds": 5.141354113912951,
+      "top_contributions": [
+        {
+          "feature": "numeric__graduation_intensity",
+          "transformed_value": 5.512989745420257,
+          "contribution": 3.479224084939812
+        },
+        {
+          "feature": "numeric__demand_volatility_to_date",
+          "transformed_value": 3.56781621142324,
+          "contribution": 1.9805150366411932
+        },
+        {
+          "feature": "categorical__education_network_2.0",
+          "transformed_value": 1.0,
+          "contribution": 0.725623694267749
+        },
+        {
+          "feature": "categorical__administrative_category_4.0",
+          "transformed_value": 1.0,
+          "contribution": 0.6006962192899914
+        },
+        {
+          "feature": "numeric__current_low_occupancy_streak",
+          "transformed_value": 4.326618472631817,
+          "contribution": 0.3835931452559214
+        }
+      ],
+      "offer": {
+        "institution_id": 5008,
+        "course_id": 117234,
+        "teaching_modality": 1,
+        "reference_year": 2022
+      },
+      "observed_deterioration": true
+    },
+    {
+      "predicted_probability": 0.9941353115354111,
+      "intercept": -2.830230564758242,
+      "log_odds": 5.13292396271971,
+      "top_contributions": [
+        {
+          "feature": "numeric__offered_seats",
+          "transformed_value": 59.667539336759944,
+          "contribution": 3.6132240566429794
+        },
+        {
+          "feature": "numeric__graduation_intensity",
+          "transformed_value": 2.6580114126141514,
+          "contribution": 1.677459554952806
+        },
+        {
+          "feature": "numeric__demand_volatility_to_date",
+          "transformed_value": 2.4420629971596703,
+          "contribution": 1.35560303549673
+        },
+        {
+          "feature": "categorical__education_network_2.0",
+          "transformed_value": 1.0,
+          "contribution": 0.725623694267749
+        },
+        {
+          "feature": "numeric__enrollments",
+          "transformed_value": -0.2096466708348514,
+          "contribution": 0.3246691025675061
+        }
+      ],
+      "offer": {
+        "institution_id": 319,
+        "course_id": 1425391,
+        "teaching_modality": 2,
+        "reference_year": 2022
+      },
+      "observed_deterioration": true
+    },
+    {
+      "predicted_probability": 0.9940829217123803,
+      "intercept": -2.830230564758242,
+      "log_odds": 5.123977830850996,
+      "top_contributions": [
+        {
+          "feature": "numeric__graduation_intensity",
+          "transformed_value": 5.512989745420257,
+          "contribution": 3.479224084939812
+        },
+        {
+          "feature": "numeric__demand_volatility_to_date",
+          "transformed_value": 4.062963868958861,
+          "contribution": 2.255374312734838
+        },
+        {
+          "feature": "categorical__education_network_2.0",
+          "transformed_value": 1.0,
+          "contribution": 0.725623694267749
+        },
+        {
+          "feature": "categorical__administrative_category_4.0",
+          "transformed_value": 1.0,
+          "contribution": 0.6006962192899914
+        },
+        {
+          "feature": "numeric__enrollments",
+          "transformed_value": -0.23653669478850817,
+          "contribution": 0.36631231068660763
+        }
+      ],
+      "offer": {
+        "institution_id": 1295,
+        "course_id": 95585,
+        "teaching_modality": 1,
+        "reference_year": 2021
+      },
+      "observed_deterioration": true
+    },
+    {
+      "predicted_probability": 0.9937251179902258,
+      "intercept": -2.830230564758242,
+      "log_odds": 5.064905945536851,
+      "top_contributions": [
+        {
+          "feature": "numeric__graduation_intensity",
+          "transformed_value": 5.512989745420257,
+          "contribution": 3.479224084939812
+        },
+        {
+          "feature": "numeric__demand_volatility_to_date",
+          "transformed_value": 3.3747519780767448,
+          "contribution": 1.8733439845124156
+        },
+        {
+          "feature": "categorical__education_network_2.0",
+          "transformed_value": 1.0,
+          "contribution": 0.725623694267749
+        },
+        {
+          "feature": "categorical__administrative_category_4.0",
+          "transformed_value": 1.0,
+          "contribution": 0.6006962192899914
+        },
+        {
+          "feature": "numeric__institution_enrollment_hhi",
+          "transformed_value": 5.929913773889195,
+          "contribution": 0.5941660466713214
+        }
+      ],
+      "offer": {
+        "institution_id": 1937,
+        "course_id": 53379,
+        "teaching_modality": 1,
+        "reference_year": 2022
+      },
+      "observed_deterioration": false
+    },
+    {
+      "predicted_probability": 0.9936128977539188,
+      "intercept": -2.830230564758242,
+      "log_odds": 5.04706700900752,
+      "top_contributions": [
+        {
+          "feature": "numeric__demand_volatility_to_date",
+          "transformed_value": 6.819837584973094,
+          "contribution": 3.785730565729441
+        },
+        {
+          "feature": "numeric__graduation_intensity",
+          "transformed_value": 5.140094616237419,
+          "contribution": 3.2438915749006925
+        },
+        {
+          "feature": "numeric__years_observed_to_date",
+          "transformed_value": 2.7152398803848157,
+          "contribution": 0.43045814858665576
+        },
+        {
+          "feature": "numeric__enrollments",
+          "transformed_value": -0.2225937194051306,
+          "contribution": 0.34471953610633277
+        },
+        {
+          "feature": "categorical__administrative_category_2.0",
+          "transformed_value": 1.0,
+          "contribution": 0.16023709987750567
+        }
+      ],
+      "offer": {
+        "institution_id": 3172,
+        "course_id": 1300453,
+        "teaching_modality": 1,
+        "reference_year": 2022
+      },
+      "observed_deterioration": true
+    },
+    {
+      "predicted_probability": 0.9928246237586533,
+      "intercept": -2.830230564758242,
+      "log_odds": 4.929898837829073,
+      "top_contributions": [
+        {
+          "feature": "numeric__demand_volatility_to_date",
+          "transformed_value": 6.819837584973094,
+          "contribution": 3.785730565729441
+        },
+        {
+          "feature": "numeric__graduation_intensity",
+          "transformed_value": 5.512989745420257,
+          "contribution": 3.479224084939812
+        },
+        {
+          "feature": "numeric__years_observed_to_date",
+          "transformed_value": 2.7152398803848157,
+          "contribution": 0.43045814858665576
+        },
+        {
+          "feature": "numeric__enrollments",
+          "transformed_value": -0.213630378087245,
+          "contribution": 0.3308384667332989
+        },
+        {
+          "feature": "numeric__enrollment_growth_1y",
+          "transformed_value": 1.59641972682441,
+          "contribution": -0.14946694884746783
+        }
+      ],
+      "offer": {
+        "institution_id": 549,
+        "course_id": 113865,
+        "teaching_modality": 1,
+        "reference_year": 2022
+      },
+      "observed_deterioration": false
+    },
+    {
+      "predicted_probability": 0.9927984748126478,
+      "intercept": -2.830230564758242,
+      "log_odds": 4.926234862475317,
+      "top_contributions": [
+        {
+          "feature": "numeric__graduation_intensity",
+          "transformed_value": 5.512989745420257,
+          "contribution": 3.479224084939812
+        },
+        {
+          "feature": "numeric__demand_volatility_to_date",
+          "transformed_value": 5.882908722181428,
+          "contribution": 3.2656360342115724
+        },
+        {
+          "feature": "numeric__enrollments",
+          "transformed_value": -0.23653669478850817,
+          "contribution": 0.36631231068660763
+        },
+        {
+          "feature": "numeric__years_observed_to_date",
+          "transformed_value": 1.5416190753029064,
+          "contribution": 0.24439921414483376
+        },
+        {
+          "feature": "numeric__current_low_occupancy_streak",
+          "transformed_value": 2.242292374043684,
+          "contribution": 0.1987991291082296
+        }
+      ],
+      "offer": {
+        "institution_id": 756,
+        "course_id": 1357859,
+        "teaching_modality": 1,
+        "reference_year": 2021
+      },
+      "observed_deterioration": true
+    },
+    {
+      "predicted_probability": 0.992688562818616,
+      "intercept": -2.830230564758242,
+      "log_odds": 4.9109771229645345,
+      "top_contributions": [
+        {
+          "feature": "numeric__demand_volatility_to_date",
+          "transformed_value": 6.669687736053914,
+          "contribution": 3.702381532059567
+        },
+        {
+          "feature": "numeric__graduation_intensity",
+          "transformed_value": 5.038395944642099,
+          "contribution": 3.17970998125366
+        },
+        {
+          "feature": "numeric__years_observed_to_date",
+          "transformed_value": 2.7152398803848157,
+          "contribution": 0.43045814858665576
+        },
+        {
+          "feature": "numeric__enrollments",
+          "transformed_value": -0.2026751831431626,
+          "contribution": 0.31387271527736865
+        },
+        {
+          "feature": "categorical__administrative_category_2.0",
+          "transformed_value": 1.0,
+          "contribution": 0.16023709987750567
+        }
+      ],
+      "offer": {
+        "institution_id": 719,
+        "course_id": 1269977,
+        "teaching_modality": 1,
+        "reference_year": 2022
+      },
+      "observed_deterioration": false
+    },
+    {
+      "predicted_probability": 0.9925116585852604,
+      "intercept": -2.830230564758242,
+      "log_odds": 4.886891426124718,
+      "top_contributions": [
+        {
+          "feature": "numeric__graduation_intensity",
+          "transformed_value": 5.512989745420257,
+          "contribution": 3.479224084939812
+        },
+        {
+          "feature": "numeric__demand_volatility_to_date",
+          "transformed_value": 3.4953786158260756,
+          "contribution": 1.9403045160322605
+        },
+        {
+          "feature": "categorical__education_network_2.0",
+          "transformed_value": 1.0,
+          "contribution": 0.725623694267749
+        },
+        {
+          "feature": "categorical__administrative_category_4.0",
+          "transformed_value": 1.0,
+          "contribution": 0.6006962192899914
+        },
+        {
+          "feature": "numeric__institution_enrollment_hhi",
+          "transformed_value": 4.373415798460042,
+          "contribution": 0.43820791912065654
+        }
+      ],
+      "offer": {
+        "institution_id": 5038,
+        "course_id": 118844,
+        "teaching_modality": 1,
+        "reference_year": 2021
+      },
+      "observed_deterioration": true
+    },
+    {
+      "predicted_probability": 0.9924592478002161,
+      "intercept": -2.830230564758242,
+      "log_odds": 4.879864013278867,
+      "top_contributions": [
+        {
+          "feature": "numeric__graduation_intensity",
+          "transformed_value": 5.512989745420257,
+          "contribution": 3.479224084939812
+        },
+        {
+          "feature": "numeric__demand_volatility_to_date",
+          "transformed_value": 4.208203379347715,
+          "contribution": 2.3359975896061496
+        },
+        {
+          "feature": "categorical__education_network_2.0",
+          "transformed_value": 1.0,
+          "contribution": 0.725623694267749
+        },
+        {
+          "feature": "numeric__years_observed_to_date",
+          "transformed_value": 2.7152398803848157,
+          "contribution": 0.43045814858665576
+        },
+        {
+          "feature": "numeric__enrollments",
+          "transformed_value": -0.213630378087245,
+          "contribution": 0.3308384667332989
+        }
+      ],
+      "offer": {
+        "institution_id": 446,
+        "course_id": 9238,
+        "teaching_modality": 1,
+        "reference_year": 2022
+      },
+      "observed_deterioration": true
+    },
+    {
+      "predicted_probability": 0.9923605674569667,
+      "intercept": -2.830230564758242,
+      "log_odds": 4.866763190554927,
+      "top_contributions": [
+        {
+          "feature": "numeric__demand_volatility_to_date",
+          "transformed_value": 6.819837584973094,
+          "contribution": 3.785730565729441
+        },
+        {
+          "feature": "numeric__graduation_intensity",
+          "transformed_value": 5.091979115697698,
+          "contribution": 3.213526089734355
+        },
+        {
+          "feature": "numeric__years_observed_to_date",
+          "transformed_value": 2.7152398803848157,
+          "contribution": 0.43045814858665576
+        },
+        {
+          "feature": "numeric__enrollments",
+          "transformed_value": -0.22657742665752417,
+          "contribution": 0.35088890027212555
+        },
+        {
+          "feature": "numeric__occupancy_rate_lag1",
+          "transformed_value": -1.3584674290798426,
+          "contribution": 0.12860672908360973
+        }
+      ],
+      "offer": {
+        "institution_id": 578,
+        "course_id": 118057,
+        "teaching_modality": 1,
+        "reference_year": 2022
+      },
+      "observed_deterioration": true
+    },
+    {
+      "predicted_probability": 0.9923042754134147,
+      "intercept": -2.830230564758242,
+      "log_odds": 4.859364863343785,
+      "top_contributions": [
+        {
+          "feature": "numeric__graduation_intensity",
+          "transformed_value": 5.512989745420257,
+          "contribution": 3.479224084939812
+        },
+        {
+          "feature": "numeric__demand_volatility_to_date",
+          "transformed_value": 3.4094139876822926,
+          "contribution": 1.8925850628516512
+        },
+        {
+          "feature": "categorical__education_network_2.0",
+          "transformed_value": 1.0,
+          "contribution": 0.725623694267749
+        },
+        {
+          "feature": "categorical__administrative_category_4.0",
+          "transformed_value": 1.0,
+          "contribution": 0.6006962192899914
+        },
+        {
+          "feature": "numeric__current_low_occupancy_streak",
+          "transformed_value": 4.326618472631817,
+          "contribution": 0.3835931452559214
+        }
+      ],
+      "offer": {
+        "institution_id": 1404,
+        "course_id": 1261544,
+        "teaching_modality": 1,
+        "reference_year": 2022
+      },
+      "observed_deterioration": false
+    },
+    {
+      "predicted_probability": 0.9922920474237334,
+      "intercept": -2.830230564758242,
+      "log_odds": 4.857764868602778,
+      "top_contributions": [
+        {
+          "feature": "numeric__graduation_intensity",
+          "transformed_value": 4.397491495728007,
+          "contribution": 2.775237943797148
+        },
+        {
+          "feature": "numeric__demand_volatility_to_date",
+          "transformed_value": 4.467293337585688,
+          "contribution": 2.4798198965092144
+        },
+        {
+          "feature": "categorical__education_network_2.0",
+          "transformed_value": 1.0,
+          "contribution": 0.725623694267749
+        },
+        {
+          "feature": "categorical__administrative_category_4.0",
+          "transformed_value": 1.0,
+          "contribution": 0.6006962192899914
+        },
+        {
+          "feature": "numeric__institution_enrollment_hhi",
+          "transformed_value": 3.703371340386738,
+          "contribution": 0.37107074277579155
+        }
+      ],
+      "offer": {
+        "institution_id": 17025,
+        "course_id": 1171921,
+        "teaching_modality": 1,
+        "reference_year": 2022
+      },
+      "observed_deterioration": true
+    }
+  ],
+  "stability": {
+    "window_size": 3,
+    "top_k": 1000,
+    "windows": [
+      {
+        "window": "2016-2018",
+        "roc_auc": 0.8061920167264129,
+        "average_precision": 0.523105098177069,
+        "precision_at_k": 0.802
+      },
+      {
+        "window": "2017-2019",
+        "roc_auc": 0.8103779582101979,
+        "average_precision": 0.5337947400568928,
+        "precision_at_k": 0.834
+      },
+      {
+        "window": "2018-2020",
+        "roc_auc": 0.8158406257549632,
+        "average_precision": 0.5437888017805053,
+        "precision_at_k": 0.841
+      }
+    ],
+    "consecutive_top_k_overlap": [
+      {
+        "windows": "2016-2018 vs 2017-2019",
+        "jaccard": 0.8518518518518519
+      },
+      {
+        "windows": "2017-2019 vs 2018-2020",
+        "jaccard": 0.7825311942959001
+      }
+    ],
+    "coefficients_by_window": {
+      "numeric__enrollments": {
+        "2016-2018": -1.6752806049419853,
+        "2017-2019": -1.944795542016179,
+        "2018-2020": -1.2649010076842921
+      },
+      "numeric__graduation_intensity": {
+        "2016-2018": 0.6040857558225347,
+        "2017-2019": 0.5837802754128775,
+        "2018-2020": 0.6584808287893121
+      },
+      "categorical__administrative_category_infrequent_sklearn": {
+        "2016-2018": 0.5799070038138155,
+        "2017-2019": 0.6960668193333436,
+        "2018-2020": 0.4838451777113135
+      },
+      "numeric__demand_volatility_to_date": {
+        "2016-2018": 0.5633842266680139,
+        "2017-2019": 0.5610610790355942,
+        "2018-2020": 0.5480567015328706
+      },
+      "categorical__education_network_2.0": {
+        "2016-2018": 0.48346162674363113,
+        "2017-2019": 0.6799413549547803,
+        "2018-2020": 0.6846998112506444
+      },
+      "categorical__administrative_category_3.0": {
+        "2016-2018": 0.46115337658204936,
+        "2017-2019": 0.556961762303739
+      },
+      "categorical__administrative_category_4.0": {
+        "2016-2018": 0.4266243356575836,
+        "2017-2019": 0.5799235874084105,
+        "2018-2020": 0.5754592738051775
+      },
+      "numeric__enrollment_growth_2y": {
+        "2016-2018": -0.3288007118896799,
+        "2017-2019": -0.16274662646966867,
+        "2018-2020": -0.13228776319584076
+      },
+      "categorical__administrative_category_2.0": {
+        "2016-2018": 0.21958366442854926,
+        "2017-2019": 0.00624602815707974,
+        "2018-2020": -0.16523727722571108
+      },
+      "numeric__occupancy_rate_lag1": {
+        "2016-2018": -0.21915503307190792,
+        "2017-2019": -0.1302751272559798,
+        "2018-2020": -0.021054003262995665
+      },
+      "numeric__occupancy_change_1y": {
+        "2016-2018": -0.20618684773262486,
+        "2017-2019": -0.14930186464916345,
+        "2018-2020": -0.044905256861531545
+      },
+      "numeric__years_observed_to_date": {
+        "2016-2018": 0.16998733455523776,
+        "2017-2019": 0.1498036798968843,
+        "2018-2020": -0.02797326869020084
+      },
+      "numeric__institution_offer_count": {
+        "2016-2018": -0.12459081661062044,
+        "2017-2019": -0.09054419663077078,
+        "2018-2020": 0.010433241655425342
+      },
+      "numeric__enrollment_growth_1y": {
+        "2016-2018": -0.12033755319715048,
+        "2017-2019": -0.12198158693427465,
+        "2018-2020": -0.08233926097479917
+      },
+      "numeric__occupancy_rate": {
+        "2016-2018": 0.0930646881768337,
+        "2017-2019": 0.1328843781141383,
+        "2018-2020": -0.004428123727308246
+      },
+      "categorical__teaching_modality_2.0": {
+        "2016-2018": -0.09101643435246425,
+        "2017-2019": -0.3033278507721421,
+        "2018-2020": -0.5885111878260676
+      },
+      "numeric__institution_enrollment_hhi": {
+        "2016-2018": 0.08099605538340839,
+        "2017-2019": 0.08240166283882429,
+        "2018-2020": 0.10103359753952418
+      },
+      "numeric__offered_seats": {
+        "2016-2018": 0.07739222715776546,
+        "2017-2019": 0.10765730154232896,
+        "2018-2020": 0.06904311526198213
+      },
+      "categorical__administrative_category_5.0": {
+        "2016-2018": 0.056837291086048645,
+        "2017-2019": 0.10001776754638002,
+        "2018-2020": 0.10924053744546026
+      },
+      "numeric__mean_occupancy_to_date": {
+        "2016-2018": -0.04285317765067871,
+        "2017-2019": -0.03877093166325766,
+        "2018-2020": -0.05205929909090959
+      },
+      "numeric__current_low_occupancy_streak": {
+        "2016-2018": 0.04158430973227355,
+        "2017-2019": 0.09871459999617592,
+        "2018-2020": 0.13512877223272957
+      },
+      "numeric__low_occupancy_share_to_date": {
+        "2016-2018": -0.01841023458000464,
+        "2017-2019": -0.09281115245139766,
+        "2018-2020": -0.09218215516618922
+      },
+      "numeric__applications_per_seat": {
+        "2016-2018": 0.0076551822718639185,
+        "2017-2019": 0.02866140149351695,
+        "2018-2020": 0.031644356489357296
+      },
+      "numeric__seat_growth_1y": {
+        "2016-2018": -0.004781943250129578,
+        "2017-2019": -0.00910569377392846,
+        "2018-2020": -0.003437589982599429
+      }
+    },
+    "sign_flipping_features": [
+      {
+        "feature": "categorical__administrative_category_2.0",
+        "max_absolute_coefficient": 0.21958366442854926,
+        "coefficients": {
+          "2016-2018": 0.21958366442854926,
+          "2017-2019": 0.00624602815707974,
+          "2018-2020": -0.16523727722571108
+        }
+      },
+      {
+        "feature": "numeric__years_observed_to_date",
+        "max_absolute_coefficient": 0.16998733455523776,
+        "coefficients": {
+          "2016-2018": 0.16998733455523776,
+          "2017-2019": 0.1498036798968843,
+          "2018-2020": -0.02797326869020084
+        }
+      },
+      {
+        "feature": "numeric__occupancy_rate",
+        "max_absolute_coefficient": 0.1328843781141383,
+        "coefficients": {
+          "2016-2018": 0.0930646881768337,
+          "2017-2019": 0.1328843781141383,
+          "2018-2020": -0.004428123727308246
+        }
+      },
+      {
+        "feature": "numeric__institution_offer_count",
+        "max_absolute_coefficient": 0.12459081661062044,
+        "coefficients": {
+          "2016-2018": -0.12459081661062044,
+          "2017-2019": -0.09054419663077078,
+          "2018-2020": 0.010433241655425342
+        }
+      }
+    ],
+    "sign_stable_features": [
+      {
+        "feature": "numeric__enrollments",
+        "min_absolute_coefficient": 1.2649010076842921,
+        "coefficients": {
+          "2016-2018": -1.6752806049419853,
+          "2017-2019": -1.944795542016179,
+          "2018-2020": -1.2649010076842921
+        }
+      },
+      {
+        "feature": "numeric__graduation_intensity",
+        "min_absolute_coefficient": 0.5837802754128775,
+        "coefficients": {
+          "2016-2018": 0.6040857558225347,
+          "2017-2019": 0.5837802754128775,
+          "2018-2020": 0.6584808287893121
+        }
+      },
+      {
+        "feature": "numeric__demand_volatility_to_date",
+        "min_absolute_coefficient": 0.5480567015328706,
+        "coefficients": {
+          "2016-2018": 0.5633842266680139,
+          "2017-2019": 0.5610610790355942,
+          "2018-2020": 0.5480567015328706
+        }
+      },
+      {
+        "feature": "categorical__administrative_category_infrequent_sklearn",
+        "min_absolute_coefficient": 0.4838451777113135,
+        "coefficients": {
+          "2016-2018": 0.5799070038138155,
+          "2017-2019": 0.6960668193333436,
+          "2018-2020": 0.4838451777113135
+        }
+      },
+      {
+        "feature": "categorical__education_network_2.0",
+        "min_absolute_coefficient": 0.48346162674363113,
+        "coefficients": {
+          "2016-2018": 0.48346162674363113,
+          "2017-2019": 0.6799413549547803,
+          "2018-2020": 0.6846998112506444
+        }
+      },
+      {
+        "feature": "categorical__administrative_category_3.0",
+        "min_absolute_coefficient": 0.46115337658204936,
+        "coefficients": {
+          "2016-2018": 0.46115337658204936,
+          "2017-2019": 0.556961762303739
+        }
+      },
+      {
+        "feature": "categorical__administrative_category_4.0",
+        "min_absolute_coefficient": 0.4266243356575836,
+        "coefficients": {
+          "2016-2018": 0.4266243356575836,
+          "2017-2019": 0.5799235874084105,
+          "2018-2020": 0.5754592738051775
+        }
+      },
+      {
+        "feature": "numeric__enrollment_growth_2y",
+        "min_absolute_coefficient": 0.13228776319584076,
+        "coefficients": {
+          "2016-2018": -0.3288007118896799,
+          "2017-2019": -0.16274662646966867,
+          "2018-2020": -0.13228776319584076
+        }
+      }
+    ]
+  }
 }

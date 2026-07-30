@@ -5,12 +5,15 @@ import pytest
 from radar_sustentabilidade.alerting import (
     CATEGORICAL_FEATURES,
     FEATURE_COLUMNS,
+    LABEL_COLUMN,
     NUMERIC_FEATURES,
     build_reference_model,
     calibration_table,
     coefficient_table,
     evaluate,
+    explain_predictions,
     precision_at_k,
+    rolling_window_stability,
     split_frame,
 )
 
@@ -152,3 +155,85 @@ def test_categorical_codes_are_encoded_as_indicators() -> None:
 def test_feature_columns_are_the_union_without_duplicates() -> None:
     assert FEATURE_COLUMNS == NUMERIC_FEATURES + CATEGORICAL_FEATURES
     assert len(FEATURE_COLUMNS) == len(set(FEATURE_COLUMNS))
+
+
+def fitted_model(frame: pd.DataFrame) -> object:
+    model = build_reference_model()
+    train = frame[frame["split"] == "treino"]
+    model.fit(
+        train[FEATURE_COLUMNS].astype("float64"),
+        train[LABEL_COLUMN].to_numpy(dtype=bool).astype(int),
+    )
+    return model
+
+
+def test_explanations_decompose_the_prediction_exactly() -> None:
+    frame = make_frame([2019, 2020, 2021])
+    model = fitted_model(frame)
+    test = frame[frame["split"] == "teste"][FEATURE_COLUMNS].astype("float64")
+
+    explanations = explain_predictions(model, test.head(6), top_n=99)
+    predicted = model.predict_proba(test.head(6))[:, 1]
+
+    # A decomposição da regressão logística é exata: intercepto mais a soma
+    # das contribuições reproduz o log-odds, e portanto a probabilidade.
+    for explanation, probability in zip(explanations, predicted, strict=True):
+        total = explanation["intercept"] + sum(
+            item["contribution"] for item in explanation["top_contributions"]
+        )
+        assert total == pytest.approx(explanation["log_odds"], abs=1e-9)
+        assert explanation["predicted_probability"] == pytest.approx(
+            probability, abs=1e-9
+        )
+
+
+def test_explanations_return_the_largest_contributions_first() -> None:
+    frame = make_frame([2019, 2020, 2021])
+    model = fitted_model(frame)
+    test = frame[frame["split"] == "teste"][FEATURE_COLUMNS].astype("float64")
+
+    explanation = explain_predictions(model, test.head(1), top_n=4)[0]
+    magnitudes = [
+        abs(item["contribution"]) for item in explanation["top_contributions"]
+    ]
+
+    assert len(magnitudes) == 4
+    assert magnitudes == sorted(magnitudes, reverse=True)
+
+
+def test_stability_reports_overlap_and_separates_sign_flips() -> None:
+    frame = make_frame([2016, 2017, 2018, 2019, 2020, 2021])
+    frame["split"] = np.where(
+        frame["reference_year"] <= 2020, "treino", "teste"
+    )
+
+    result = rolling_window_stability(frame, window_size=3, top_k=10)
+
+    # Cinco anos de treino em janelas de três geram três janelas.
+    assert [window["window"] for window in result["windows"]] == [
+        "2016-2018",
+        "2017-2019",
+        "2018-2020",
+    ]
+    assert len(result["consecutive_top_k_overlap"]) == 2
+    for overlap in result["consecutive_top_k_overlap"]:
+        assert 0.0 <= overlap["jaccard"] <= 1.0
+
+    # Um atributo não pode ser classificado como estável e instável ao mesmo
+    # tempo: a magnitude acompanha cada caso para separar instabilidade real
+    # de coeficiente que apenas oscila em torno de zero.
+    flipping = {row["feature"] for row in result["sign_flipping_features"]}
+    stable = {row["feature"] for row in result["sign_stable_features"]}
+    assert not flipping & stable
+    for row in result["sign_flipping_features"]:
+        assert row["max_absolute_coefficient"] >= 0
+
+
+def test_stability_requires_more_than_one_window() -> None:
+    frame = make_frame([2019, 2020, 2021])
+    frame["split"] = np.where(
+        frame["reference_year"] <= 2020, "treino", "teste"
+    )
+
+    with pytest.raises(ValueError, match="ao menos duas janelas"):
+        rolling_window_stability(frame, window_size=2)
