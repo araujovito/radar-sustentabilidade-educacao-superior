@@ -17,6 +17,12 @@ from radar_sustentabilidade.ingestion.download import (
     import_local_source,
 )
 from radar_sustentabilidade.ingestion.profile import write_package_profile
+from radar_sustentabilidade.longitudinal import (
+    common_columns,
+    generate_longitudinal_sql,
+    load_profiles,
+    year_only_columns,
+)
 from radar_sustentabilidade.quality import write_course_quality_profile
 from radar_sustentabilidade.sqlgen import generate_raw_sql
 
@@ -117,6 +123,37 @@ def extract_tables(
     typer.echo(
         f"{manifest['extracted_file_count']} tabelas extraídas em {output_dir}"
     )
+
+
+@app.command("generate-longitudinal-sql")
+def generate_longitudinal(
+    start_year: int = 2014,
+    end_year: int = 2024,
+    reports_dir: Path = Path("reports"),
+    output_dir: Path = Path("sql/generated"),
+) -> None:
+    """Gera a união das camadas raw anuais pela interseção documentada."""
+    years = list(range(start_year, end_year + 1))
+    output_path = generate_longitudinal_sql(reports_dir, years, output_dir)
+    typer.echo(output_path)
+
+
+@app.command("report-layout-drift")
+def report_layout_drift(
+    start_year: int = 2014,
+    end_year: int = 2024,
+    reports_dir: Path = Path("reports"),
+) -> None:
+    """Compara os leiautes das edições e destaca as colunas instáveis."""
+    years = list(range(start_year, end_year + 1))
+    profiles = load_profiles(reports_dir, years)
+
+    for kind in ("cursos", "ies"):
+        shared = common_columns(profiles, kind)
+        typer.echo(f"{kind}: {len(shared)} colunas comuns a {len(years)} anos")
+        for year, columns in year_only_columns(profiles, kind).items():
+            if columns:
+                typer.echo(f"  somente em {year}: {', '.join(columns)}")
 
 
 @app.command("build-mvp")

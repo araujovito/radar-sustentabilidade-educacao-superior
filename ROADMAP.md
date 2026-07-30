@@ -24,6 +24,7 @@
 - [x] Reconciliar oferta e alunos nas dimensões específicas da EAD.
 - [x] Implementar testes de unicidade, integridade e reconciliação.
 - [x] Executar a carga completa no PostgreSQL local.
+- [x] Criar a camada `raw` longitudinal de 2014 a 2024.
 
 ## Marco 3 — Métricas e hipóteses
 

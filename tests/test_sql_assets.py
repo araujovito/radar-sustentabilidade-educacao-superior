@@ -16,6 +16,53 @@ def test_generated_raw_schema_matches_profiled_column_count() -> None:
     assert "ENCODING 'LATIN1'" in load_script
 
 
+def test_every_edition_has_versioned_raw_assets() -> None:
+    generated = PROJECT_ROOT / "sql" / "generated"
+
+    for year in range(2014, 2025):
+        ddl = generated / f"010_raw_{year}.sql"
+        load_script = generated / f"011_load_{year}.psql"
+
+        assert ddl.exists(), f"DDL ausente para {year}"
+        assert load_script.exists(), f"Script de carga ausente para {year}"
+        assert f"raw.censo_superior_cursos_{year}" in ddl.read_text(
+            encoding="utf-8"
+        )
+        assert f"censo_superior_{year}/" in load_script.read_text(
+            encoding="utf-8"
+        )
+
+
+def test_longitudinal_union_covers_the_documented_window() -> None:
+    union = (
+        PROJECT_ROOT / "sql" / "generated" / "012_raw_longitudinal.sql"
+    ).read_text(encoding="utf-8")
+
+    assert "raw.censo_superior_cursos_todos" in union
+    assert "raw.censo_superior_ies_todos" in union
+    # Onze edições geram dez uniões por família de tabela.
+    assert union.count("UNION ALL") == 20
+    # A grafia divergente de 2020 entra normalizada, não como coluna própria.
+    assert "co_cine_rotulo2 AS co_cine_rotulo" in union
+    assert "co_cine_rotulo2 AS co_cine_rotulo2" not in union
+    # Colunas de uma única edição ficam fora da união.
+    assert "qt_ing_rvppi" not in union
+    assert "co_projeto" not in union
+
+
+def test_longitudinal_assertions_check_grain_and_normalization() -> None:
+    assertions = (
+        PROJECT_ROOT
+        / "sql"
+        / "quality"
+        / "041_assertions_longitudinal.sql"
+    ).read_text(encoding="utf-8")
+
+    assert "duplicate_key_count" in assertions
+    assert "missing_cine_label_count" in assertions
+    assert "invalid_dimension_count" in assertions
+
+
 def test_analytics_reconciles_ead_dimensions() -> None:
     analytics = (
         PROJECT_ROOT
