@@ -54,6 +54,7 @@ run sql/analytics/032_course_persistence.sql
 run sql/analytics/034_deterioration_labels.sql
 run sql/analytics/035_offer_features.sql
 run sql/analytics/036_training_set.sql
+run sql/analytics/037_modality_completion.sql
 
 if [ "$WITH_FIXTURE" -eq 1 ]; then
     # Reexecuta a materialização para provar que o script é idempotente com as

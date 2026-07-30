@@ -126,6 +126,7 @@ lista diversificada de ofertas para auditoria prioritária.
 - [Achados analíticos do MVP 2024](docs/mvp_2024_findings.md)
 - [Mudanças de leiaute entre edições](docs/layout_changes.md)
 - [Persistência e volatilidade na série 2014-2024](docs/persistence_findings.md)
+- [Transição de modalidade e conclusão defasada](docs/modality_completion_findings.md)
 - [Sistema de alerta de deterioração](docs/alerting_findings.md)
 
 ## Executar o MVP 2024
@@ -198,3 +199,15 @@ radar build-dashboard --output caminho/painel.html
 As probabilidades do modelo não devem ser interpretadas como risco calibrado.
 O painel usa a ordenação relativa e limita a lista a uma oferta por instituição
 para diversificar a auditoria.
+
+## Gerar as métricas finais do Marco 3
+
+Depois de aplicar a camada analítica ao banco longitudinal:
+
+```bash
+radar build-milestone3-report
+```
+
+O comando grava `reports/milestone3/metrics.json`, com a transição entre
+portfólios presencial, EAD e dual e a análise de sensibilidade da conclusão
+defasada entre três e cinco anos.

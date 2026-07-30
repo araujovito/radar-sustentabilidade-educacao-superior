@@ -49,6 +49,27 @@ declaradas subiram 18,8% no presencial e 75,1% na EAD entre a primeira e a
 última observação. No último ano, essas ofertas concentram 1,54 milhão de vagas
 não convertidas no presencial e 3,62 milhões na EAD.
 
+### A expansão da EAD não equivale a substituição direta
+
+A participação da EAD passou de 37,7% para 78,6% das vagas e de 17,1% para
+50,7% das matrículas entre 2014 e 2024. Entretanto, entre 17.060 combinações
+IES–área CINE presentes nos dois extremos, somente 12,3% combinam expansão EAD
+e retração presencial. A correlação entre essas variações é -0,08.
+
+O movimento dominante é criação de portfólios EAD e dualização, não troca
+direta: de 2023 para 2024, 254 portfólios passaram de presencial para dual e
+apenas 14 passaram diretamente de presencial para EAD.
+
+### Conclusão defasada melhora o denominador, mas não cria coortes
+
+Com quatro anos de defasagem, concluintes de 2024 representam 40,3% dos
+ingressantes de 2020 nas ofertas presenciais elegíveis e 26,7% nas EAD. A
+cobertura é 61,9% e 34,2%, respectivamente. Variar a defasagem entre três e
+cinco anos altera materialmente cobertura e resultado, sobretudo na EAD.
+
+A medida é usada como proxy agregada com análise de sensibilidade. Ela não
+rastreia indivíduos e não deve ranquear cursos isoladamente.
+
 ## O que torna isso acionável
 
 O fenômeno é extremamente concentrado. Das 2.526 instituições com capacidade
@@ -152,5 +173,6 @@ Decisões metodológicas que sustentam os números acima:
 - [Achados analíticos do MVP 2024](mvp_2024_findings.md)
 - [Mudanças de leiaute entre edições](layout_changes.md)
 - [Persistência e volatilidade](persistence_findings.md)
+- [Transição de modalidade e conclusão defasada](modality_completion_findings.md)
 - [Sistema de alerta](alerting_findings.md)
 - [Modelo SQL](sql_model.md)

@@ -176,6 +176,34 @@ BEGIN
         RAISE EXCEPTION 'Ociosidade atribuida sem capacidade: %', actual;
     END IF;
 
+    -- ------------------------------------------------------------------
+    -- Transição de modalidade e conclusão defasada
+    -- ------------------------------------------------------------------
+
+    SELECT COUNT(*) INTO actual
+    FROM analytics.modality_portfolio_transition
+    WHERE census_year = 2024
+      AND institution_id = 1
+      AND cine_label_code = '0100'
+      AND previous_state = 'presencial'
+      AND current_state = 'dual';
+    IF actual IS DISTINCT FROM 1 THEN
+        RAISE EXCEPTION 'Transicao presencial-dual nao detectada: %', actual;
+    END IF;
+
+    -- Em 2022, o curso 100 conclui 65 estudantes. Quatro anos antes havia
+    -- 80 ingressantes: a proxy precisa resultar em 65/80 = 0,8125.
+    SELECT ROUND(lagged_completion_ratio, 4) INTO actual
+    FROM analytics.lagged_completion_efficiency
+    WHERE census_year = 2022
+      AND institution_id = 1
+      AND course_id = 100
+      AND teaching_modality = 1
+      AND lag_years = 4;
+    IF actual IS DISTINCT FROM 0.8125 THEN
+        RAISE EXCEPTION 'Conclusao defasada incorreta: %', actual;
+    END IF;
+
     RAISE NOTICE 'Todas as verificacoes do fixture passaram.';
 END
 $$;

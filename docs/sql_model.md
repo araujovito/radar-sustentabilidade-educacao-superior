@@ -122,6 +122,16 @@ Sobre ela ficam:
   as marcas `has_measurable_occupancy` e `is_low_occupancy`;
 - `analytics.course_persistence`: uma linha por oferta, com anos ociosos,
   sequência ociosa atual, volatilidade da demanda e cobertura do painel.
+- `analytics.modality_portfolio_state_snapshot`: uma linha por ano, IES e área
+  CINE, materializada para comparar portfólios presencial, EAD e dual;
+- `analytics.modality_portfolio_transition`: mudanças anuais de estado,
+  incluindo entrada e saída de portfólios;
+- `analytics.modality_dependency`: participação da EAD nas vagas e nos
+  ingressantes por área CINE;
+- `analytics.lagged_completion_efficiency`: razões de conclusão com
+  defasagens de três, quatro e cinco anos;
+- `analytics.lagged_completion_summary`: cobertura, razão agregada, mediana e
+  incidência de resultados acima de 100%.
 
 Ofertas com zero vagas declaradas ficam fora do cálculo de ociosidade: são não
 mensuráveis, não ociosas. Os achados estão em
@@ -131,6 +141,7 @@ Reconstruir depois de recarregar qualquer edição:
 
 ```bash
 psql -f sql/analytics/033_materialize_supply.sql
+psql -f sql/analytics/037_modality_completion.sql
 ```
 
 ## Métricas
@@ -139,10 +150,14 @@ psql -f sql/analytics/033_materialize_supply.sql
 - `applications_per_seat`: inscrições divididas por vagas;
 - `unconverted_seat_capacity`: vagas menos ingressantes;
 - `graduation_intensity`: concluintes divididos por matrículas do mesmo ano.
+- `lagged_completion_ratio`: concluintes em `t` divididos pelos ingressantes da
+  mesma oferta em `t-3`, `t-4` ou `t-5`, com mínimo de 20 ingressantes.
 
-`graduation_intensity` não é taxa de conclusão de coorte. Ela será usada apenas
-como medida transversal até que a série histórica permita construir
-denominadores defasados.
+Nem `graduation_intensity` nem `lagged_completion_ratio` são taxas de conclusão
+de coorte. A segunda aproxima temporalmente numerador e denominador e é usada
+como proxy agregada, sempre com sensibilidade entre defasagens e incidência de
+razões acima de 100%. A validação está em
+[modality_completion_findings.md](modality_completion_findings.md).
 
 ## Execução
 

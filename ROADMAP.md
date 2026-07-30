@@ -33,8 +33,8 @@
 - [x] Construir indicador de capacidade ociosa persistente.
 - [x] Medir volatilidade da demanda e persistência do crescimento.
 - [x] Calcular concentração do portfólio por instituição.
-- [ ] Estudar transição e dependência entre presencial e EAD.
-- [ ] Validar uma medida de eficiência de conclusão com defasagem.
+- [x] Estudar transição e dependência entre presencial e EAD.
+- [x] Validar uma medida de eficiência de conclusão com defasagem.
 
 ## Marco 4 — Sistema de alerta
 

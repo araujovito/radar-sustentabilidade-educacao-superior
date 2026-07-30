@@ -1,0 +1,342 @@
+{
+  "schema_version": 1,
+  "period": {
+    "first_year": 2014,
+    "last_year": 2024
+  },
+  "unit_of_analysis": {
+    "modality_transition": "instituição × área CINE × ano",
+    "lagged_completion": "oferta × ano × defasagem"
+  },
+  "definitions": {
+    "substitution_signal": "EAD cresce e presencial recua na mesma IES e área CINE entre o primeiro e o último ano, entre pares sobreviventes",
+    "lagged_completion_ratio": "concluintes no ano t divididos por ingressantes da mesma oferta em t-3, t-4 ou t-5",
+    "completion_eligibility": "ao menos 20 ingressantes no ano-base e presença da oferta nos dois anos comparados"
+  },
+  "limitations": [
+    "O sinal de substituição é descritivo e não identifica causalidade.",
+    "A proxy de conclusão não rastreia indivíduos, transferências nem duração específica de cada curso.",
+    "Resultados de conclusão acima de 100% são preservados como diagnóstico de mistura de coortes, não truncados."
+  ],
+  "metrics": {
+    "national_modality_shares": [
+      {
+        "census_year": 2014,
+        "offered_seats": 8081369.0,
+        "entrants": 3110848.0,
+        "enrollments": 7828013.0,
+        "ead_seat_share": 0.376542266539246,
+        "ead_entrant_share": 0.23393556997963255,
+        "ead_enrollment_share": 0.17141540260599977
+      },
+      {
+        "census_year": 2019,
+        "offered_seats": 16425302.0,
+        "entrants": 3631920.0,
+        "enrollments": 8601965.0,
+        "ead_seat_share": 0.6329016050968195,
+        "ead_entrant_share": 0.4380008370228419,
+        "ead_enrollment_share": 0.2846332204327732
+      },
+      {
+        "census_year": 2024,
+        "offered_seats": 23657955.0,
+        "entrants": 5008976.0,
+        "enrollments": 10224334.0,
+        "ead_seat_share": 0.7855010291464329,
+        "ead_entrant_share": 0.6680239633809385,
+        "ead_enrollment_share": 0.5073046322626001
+      }
+    ],
+    "portfolio_states": [
+      {
+        "census_year": 2014,
+        "modality_state": "dual",
+        "institution_fields": 820
+      },
+      {
+        "census_year": 2014,
+        "modality_state": "ead",
+        "institution_fields": 482
+      },
+      {
+        "census_year": 2014,
+        "modality_state": "presencial",
+        "institution_fields": 23077
+      },
+      {
+        "census_year": 2024,
+        "modality_state": "dual",
+        "institution_fields": 4111
+      },
+      {
+        "census_year": 2024,
+        "modality_state": "ead",
+        "institution_fields": 6577
+      },
+      {
+        "census_year": 2024,
+        "modality_state": "presencial",
+        "institution_fields": 22864
+      }
+    ],
+    "latest_transitions": [
+      {
+        "transition": "presencial → presencial",
+        "institution_fields": 20817
+      },
+      {
+        "transition": "ead → ead",
+        "institution_fields": 5295
+      },
+      {
+        "transition": "dual → dual",
+        "institution_fields": 3526
+      },
+      {
+        "transition": "presencial → ausente",
+        "institution_fields": 2480
+      },
+      {
+        "transition": "ausente → presencial",
+        "institution_fields": 1980
+      },
+      {
+        "transition": "ausente → ead",
+        "institution_fields": 1038
+      },
+      {
+        "transition": "ead → ausente",
+        "institution_fields": 548
+      },
+      {
+        "transition": "dual → ausente",
+        "institution_fields": 285
+      },
+      {
+        "transition": "ausente → dual",
+        "institution_fields": 276
+      },
+      {
+        "transition": "presencial → dual",
+        "institution_fields": 254
+      },
+      {
+        "transition": "dual → ead",
+        "institution_fields": 230
+      },
+      {
+        "transition": "dual → presencial",
+        "institution_fields": 66
+      },
+      {
+        "transition": "ead → dual",
+        "institution_fields": 55
+      },
+      {
+        "transition": "presencial → ead",
+        "institution_fields": 14
+      },
+      {
+        "transition": "ead → presencial",
+        "institution_fields": 1
+      }
+    ],
+    "surviving_panel": {
+      "surviving_institution_fields": 17060,
+      "ead_up_presencial_down": 2104,
+      "substitution_signal_share": 0.12332942555685815,
+      "seat_change_correlation": -0.08309924138516003
+    },
+    "lagged_completion": [
+      {
+        "census_year": 2024,
+        "teaching_modality": 1,
+        "lag_years": 3,
+        "eligible_offers": 19252,
+        "current_offers": 34820,
+        "coverage_share": 0.5529006318207926,
+        "aggregate_completion_ratio": 0.46966985438707143,
+        "median_offer_ratio": 0.4410606762389995,
+        "exceeds_one_share": 0.05760440473717016
+      },
+      {
+        "census_year": 2024,
+        "teaching_modality": 1,
+        "lag_years": 4,
+        "eligible_offers": 21541,
+        "current_offers": 34820,
+        "coverage_share": 0.6186387133831132,
+        "aggregate_completion_ratio": 0.4034399669186117,
+        "median_offer_ratio": 0.3673469387755102,
+        "exceeds_one_share": 0.03885613481268279
+      },
+      {
+        "census_year": 2024,
+        "teaching_modality": 1,
+        "lag_years": 5,
+        "eligible_offers": 22585,
+        "current_offers": 34820,
+        "coverage_share": 0.64862148190695,
+        "aggregate_completion_ratio": 0.3575744390494744,
+        "median_offer_ratio": 0.3163265306122449,
+        "exceeds_one_share": 0.029931370378569848
+      },
+      {
+        "census_year": 2024,
+        "teaching_modality": 2,
+        "lag_years": 3,
+        "eligible_offers": 4681,
+        "current_offers": 11255,
+        "coverage_share": 0.41590404264771214,
+        "aggregate_completion_ratio": 0.231238029046794,
+        "median_offer_ratio": 0.21688500727802038,
+        "exceeds_one_share": 0.032898953215124975
+      },
+      {
+        "census_year": 2024,
+        "teaching_modality": 2,
+        "lag_years": 4,
+        "eligible_offers": 3851,
+        "current_offers": 11255,
+        "coverage_share": 0.3421590404264771,
+        "aggregate_completion_ratio": 0.26669952234833716,
+        "median_offer_ratio": 0.2459016393442623,
+        "exceeds_one_share": 0.06206180212931706
+      },
+      {
+        "census_year": 2024,
+        "teaching_modality": 2,
+        "lag_years": 5,
+        "eligible_offers": 2917,
+        "current_offers": 11255,
+        "coverage_share": 0.2591737005775211,
+        "aggregate_completion_ratio": 0.3124131828363867,
+        "median_offer_ratio": 0.26666666666666666,
+        "exceeds_one_share": 0.07199177236887212
+      }
+    ],
+    "largest_fields": [
+      {
+        "cine_label_code": "\"0113P01\"",
+        "cine_label_name": "Pedagogia",
+        "offered_seats": 1139144.0,
+        "ead_seat_share": 0.8435211000540757,
+        "ead_entrant_share": 0.8890855607778,
+        "conversion_gap": -0.045564460723724255
+      },
+      {
+        "cine_label_code": "\"0413A01\"",
+        "cine_label_name": "Administração",
+        "offered_seats": 1125221.0,
+        "ead_seat_share": 0.668777955619385,
+        "ead_entrant_share": 0.7690636762391464,
+        "conversion_gap": -0.10028572061976145
+      },
+      {
+        "cine_label_code": "\"0613S01\"",
+        "cine_label_name": "Sistemas de informação",
+        "offered_seats": 810261.0,
+        "ead_seat_share": 0.8109066091049674,
+        "ead_entrant_share": 0.7049281827598934,
+        "conversion_gap": 0.10597842634507394
+      },
+      {
+        "cine_label_code": "\"0411C01\"",
+        "cine_label_name": "Contabilidade",
+        "offered_seats": 717209.0,
+        "ead_seat_share": 0.7445974604334301,
+        "ead_entrant_share": 0.7656169759524247,
+        "conversion_gap": -0.021019515518994586
+      },
+      {
+        "cine_label_code": "\"0413G07\"",
+        "cine_label_name": "Gestão de pessoas",
+        "offered_seats": 647573.0,
+        "ead_seat_share": 0.8877207666162734,
+        "ead_entrant_share": 0.9216089670828603,
+        "conversion_gap": -0.033888200466587005
+      },
+      {
+        "cine_label_code": "\"0414M01\"",
+        "cine_label_name": "Marketing",
+        "offered_seats": 536755.0,
+        "ead_seat_share": 0.9425063576492068,
+        "ead_entrant_share": 0.9124554154748031,
+        "conversion_gap": 0.030050942174403687
+      },
+      {
+        "cine_label_code": "\"0421D01\"",
+        "cine_label_name": "Direito",
+        "offered_seats": 502144.0,
+        "ead_seat_share": 0.010036961509049197,
+        "ead_entrant_share": 8.442643347197043e-05,
+        "conversion_gap": 0.009952535075577227
+      },
+      {
+        "cine_label_code": "\"0913E01\"",
+        "cine_label_name": "Enfermagem",
+        "offered_seats": 493859.0,
+        "ead_seat_share": 0.4877728258470535,
+        "ead_entrant_share": 0.5431206156371023,
+        "conversion_gap": -0.05534778979004883
+      },
+      {
+        "cine_label_code": "\"0413L01\"",
+        "cine_label_name": "Logística",
+        "offered_seats": 438131.0,
+        "ead_seat_share": 0.8886702835453323,
+        "ead_entrant_share": 0.9115161229885297,
+        "conversion_gap": -0.022845839443197343
+      },
+      {
+        "cine_label_code": "\"0915F01\"",
+        "cine_label_name": "Fisioterapia",
+        "offered_seats": 436661.0,
+        "ead_seat_share": 0.6229088469087003,
+        "ead_entrant_share": 0.5073095848074499,
+        "conversion_gap": 0.11559926210125046
+      },
+      {
+        "cine_label_code": "\"0732E01\"",
+        "cine_label_name": "Engenharia civil",
+        "offered_seats": 429710.0,
+        "ead_seat_share": 0.5748597891601313,
+        "ead_entrant_share": 0.5618507611387046,
+        "conversion_gap": 0.013009028021426726
+      },
+      {
+        "cine_label_code": "\"0916F01\"",
+        "cine_label_name": "Farmácia",
+        "offered_seats": 417010.0,
+        "ead_seat_share": 0.6878971727296708,
+        "ead_entrant_share": 0.6239623111406276,
+        "conversion_gap": 0.06393486158904316
+      },
+      {
+        "cine_label_code": "\"0915E01\"",
+        "cine_label_name": "Educação física",
+        "offered_seats": 410172.0,
+        "ead_seat_share": 0.7361082667758891,
+        "ead_entrant_share": 0.805698027507719,
+        "conversion_gap": -0.06958976073182986
+      },
+      {
+        "cine_label_code": "\"0413G05\"",
+        "cine_label_name": "Gestão de negócios",
+        "offered_seats": 400699.0,
+        "ead_seat_share": 0.9487345863104225,
+        "ead_entrant_share": 0.8951442646023927,
+        "conversion_gap": 0.05359032170802985
+      },
+      {
+        "cine_label_code": "\"0915N01\"",
+        "cine_label_name": "Nutrição",
+        "offered_seats": 390057.0,
+        "ead_seat_share": 0.6644439146073523,
+        "ead_entrant_share": 0.6670874478265296,
+        "conversion_gap": -0.0026435332191773147
+      }
+    ]
+  }
+}

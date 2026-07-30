@@ -28,6 +28,7 @@ from radar_sustentabilidade.longitudinal import (
     load_profiles,
     year_only_columns,
 )
+from radar_sustentabilidade.milestone3 import write_milestone3_report
 from radar_sustentabilidade.quality import write_course_quality_profile
 from radar_sustentabilidade.sqlgen import generate_raw_sql
 
@@ -172,6 +173,15 @@ def build_dashboard(
     """Gera o painel de decisão como HTML autocontido."""
     output_path = write_dashboard(output, year=year, top=top)
     typer.echo(f"painel em {output_path}")
+
+
+@app.command("build-milestone3-report")
+def build_milestone3(
+    output: Path = Path("reports/milestone3/metrics.json"),
+) -> None:
+    """Gera as métricas de modalidade e conclusão defasada."""
+    output_path = write_milestone3_report(output)
+    typer.echo(f"relatório em {output_path}")
 
 
 @app.command("report-layout-drift")

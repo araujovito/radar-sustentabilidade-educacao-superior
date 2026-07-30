@@ -245,6 +245,56 @@ def test_build_script_skips_the_official_load_scripts() -> None:
     assert script.count("033_materialize_supply.sql") == 2
 
 
+def test_modality_transition_uses_comparable_cine_portfolios() -> None:
+    sql = (
+        PROJECT_ROOT
+        / "sql"
+        / "analytics"
+        / "037_modality_completion.sql"
+    ).read_text(encoding="utf-8")
+
+    assert "analytics.modality_portfolio_state" in sql
+    assert "analytics.modality_portfolio_state_snapshot" in sql
+    assert "TRUNCATE TABLE analytics.modality_portfolio_state_snapshot" in sql
+    assert "CREATE INDEX IF NOT EXISTS modality_portfolio_state_key_idx" in sql
+    assert "cine_label_code" in sql
+    assert "previous_state || ' → ' || current_state" in sql
+    assert "FULL OUTER JOIN analytics.modality_portfolio_state" in sql
+    assert "ead_seat_share" in sql
+    assert "ead_entrant_share" in sql
+
+
+def test_lagged_completion_compares_exact_calendar_years() -> None:
+    sql = (
+        PROJECT_ROOT
+        / "sql"
+        / "analytics"
+        / "037_modality_completion.sql"
+    ).read_text(encoding="utf-8")
+
+    assert "(VALUES (3), (4), (5))" in sql
+    assert "current_year.census_year - candidate.lag_years" in sql
+    assert "base_year.entrants >= 20 AS is_eligible" in sql
+    assert "analytics.lagged_completion_summary" in sql
+    assert "PERCENTILE_CONT(0.5)" in sql
+    assert "LEAD(" not in sql.upper()
+    assert "LAG(" not in sql.upper()
+
+
+def test_modality_completion_assertions_cover_metric_bounds() -> None:
+    assertions = (
+        PROJECT_ROOT
+        / "sql"
+        / "quality"
+        / "045_assertions_modality_completion.sql"
+    ).read_text(encoding="utf-8")
+
+    assert "invalid_modality_state_count" in assertions
+    assert "invalid_dependency_share_count" in assertions
+    assert "invalid_lag_count" in assertions
+    assert "invalid_eligibility_count" in assertions
+
+
 def test_workflow_runs_style_tests_and_the_sql_fixture() -> None:
     workflow = (
         PROJECT_ROOT / ".github" / "workflows" / "verificacao.yml"
