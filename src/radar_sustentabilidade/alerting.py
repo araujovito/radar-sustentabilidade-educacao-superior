@@ -608,6 +608,30 @@ def write_experiment_report(frame: pd.DataFrame, output_path: Path) -> dict:
     return report
 
 
+def score_year(labelled: pd.DataFrame, unlabelled: pd.DataFrame) -> np.ndarray:
+    """Pontua ofertas de um ano cujo horizonte ainda não se completou.
+
+    É o uso operacional real: em 2024 não existe rótulo, porque ele exigiria
+    2026. O modelo é treinado em todas as linhas com rótulo determinado e
+    aplicado ao ano corrente. Não há vazamento — os atributos do ano corrente
+    usam apenas anos anteriores ou o próprio — mas também não há validação
+    possível dessas previsões até o horizonte fechar.
+    """
+    if labelled.empty or unlabelled.empty:
+        raise ValueError("Conjuntos de treino e de pontuação não podem ser vazios")
+
+    overlap = set(labelled["reference_year"]) & set(unlabelled["reference_year"])
+    if overlap:
+        raise ValueError(f"Ano de pontuação também está no treino: {sorted(overlap)}")
+
+    model = build_reference_model()
+    model.fit(
+        labelled[FEATURE_COLUMNS].astype("float64"),
+        labelled[LABEL_COLUMN].to_numpy(dtype=bool).astype(int),
+    )
+    return model.predict_proba(unlabelled[FEATURE_COLUMNS].astype("float64"))[:, 1]
+
+
 def load_training_set() -> pd.DataFrame:
     """Lê o conjunto de treino do PostgreSQL."""
     from sqlalchemy import create_engine
