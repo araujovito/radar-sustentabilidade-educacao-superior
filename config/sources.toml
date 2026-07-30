@@ -30,6 +30,21 @@ documentation_location = "inside_archive"
 documentation_notes = "O pacote oficial distribui os microdados e seus arquivos auxiliares. Os nomes, tamanhos e checksums dos membros serão registrados após a primeira aquisição."
 verified_on = 2026-07-28
 
+[[sources]]
+id = "inep_censo_superior_microdados_2023"
+title = "Microdados do Censo da Educação Superior 2023"
+publisher = "Instituto Nacional de Estudos e Pesquisas Educacionais Anísio Teixeira (Inep)"
+reference_year = 2023
+kind = "microdata_archive"
+format = "zip"
+role = "historical"
+status = "active"
+landing_url = "https://www.gov.br/inep/pt-br/acesso-a-informacao/dados-abertos/microdados/censo-da-educacao-superior"
+download_url = "https://download.inep.gov.br/microdados/microdados_censo_da_educacao_superior_2023.zip"
+documentation_location = "inside_archive"
+documentation_notes = "Primeira edição da série histórica após o gate de qualidade de 2024. Nomes, tamanhos e checksums dos membros serão registrados após a aquisição."
+verified_on = 2026-07-29
+
 [historical_series]
 id = "inep_censo_superior_microdados"
 publisher = "Instituto Nacional de Estudos e Pesquisas Educacionais Anísio Teixeira (Inep)"

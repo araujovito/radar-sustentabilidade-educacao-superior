@@ -111,6 +111,7 @@ O planejamento detalhado está em [ROADMAP.md](ROADMAP.md).
 - [Achados de qualidade de 2024](docs/2024_quality_findings.md)
 - [Modelo SQL do MVP](docs/sql_model.md)
 - [Achados analíticos do MVP 2024](docs/mvp_2024_findings.md)
+- [Mudanças de leiaute entre edições](docs/layout_changes.md)
 
 ## Executar o MVP 2024
 
