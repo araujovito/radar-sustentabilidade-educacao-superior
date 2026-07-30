@@ -116,6 +116,16 @@ uma leitura executiva autocontida: expansão e ocupação por modalidade,
 concentração de vagas não convertidas, persistência da baixa ocupação e uma
 lista diversificada de ofertas para auditoria prioritária.
 
+Para avaliar o projeto sem preparar o banco, siga a
+[demonstração reproduzível](docs/demo.md) e execute:
+
+```bash
+radar verify-portfolio
+```
+
+O [manifesto da entrega](reports/portfolio/manifest.json) registra SHA-256,
+tamanho e verificações semânticas dos sete artefatos publicados.
+
 ## Decisões registradas
 
 - [Recorte analítico inicial](docs/scope.md)
@@ -211,3 +221,15 @@ radar build-milestone3-report
 O comando grava `reports/milestone3/metrics.json`, com a transição entre
 portfólios presencial, EAD e dual e a análise de sensibilidade da conclusão
 defasada entre três e cinco anos.
+
+## Reconstruir todos os produtos
+
+Com a base longitudinal pronta:
+
+```bash
+radar build-portfolio
+radar verify-portfolio
+```
+
+O primeiro comando regenera métricas, experimento, painel e manifesto. O
+segundo confere os hashes e as propriedades metodológicas mínimas dos artefatos.

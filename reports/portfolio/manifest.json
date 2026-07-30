@@ -1,0 +1,48 @@
+{
+  "schema_version": 1,
+  "project": "Radar de Sustentabilidade da Educação Superior",
+  "artifact_count": 7,
+  "artifacts": [
+    {
+      "path": "README.md",
+      "bytes": 8029,
+      "sha256": "ee8f949080ce71a7aeab3bbcd2676acd395334698740b8305ab3031b174660e1"
+    },
+    {
+      "path": "docs/demo.md",
+      "bytes": 4407,
+      "sha256": "2e65a4cf9a81ba06068eed1063161e003cd34d55102e5eb7e7f94eb43823993a"
+    },
+    {
+      "path": "docs/executive_report.md",
+      "bytes": 8724,
+      "sha256": "878306c6461cf2b790d8132c94b89bd1718c849a29a08c8eb1b51d8d9c567bb7"
+    },
+    {
+      "path": "docs/modality_completion_findings.md",
+      "bytes": 4610,
+      "sha256": "ef8ba8b04e78a7c1f1e1747ce936c3e23f12de31986ccdd505848b1a9be54019"
+    },
+    {
+      "path": "reports/alerting/experiment.json",
+      "bytes": 45870,
+      "sha256": "077cdd55dccaf74dee3b1280367fe219b4762612b40505454bac818daa6541f7"
+    },
+    {
+      "path": "reports/dashboard/index.html",
+      "bytes": 31939,
+      "sha256": "9d885b7ad0f2cd1eaf1db051eef85957b71883f17f36a49fd3d1f95fe04b35f9"
+    },
+    {
+      "path": "reports/milestone3/metrics.json",
+      "bytes": 10824,
+      "sha256": "af7dd28345991824f9d85132cf58a1f69e1c78ebf319e73c8ce39286fb1e56ec"
+    }
+  ],
+  "semantic_checks": {
+    "dashboard_is_self_contained": true,
+    "dashboard_contains_decision_sections": true,
+    "milestone3_schema_is_supported": true,
+    "alert_model_has_temporal_test": true
+  }
+}

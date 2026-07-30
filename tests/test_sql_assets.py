@@ -302,6 +302,7 @@ def test_workflow_runs_style_tests_and_the_sql_fixture() -> None:
 
     assert "ruff check ." in workflow
     assert "pytest -q" in workflow
+    assert "radar verify-portfolio" in workflow
     assert "postgres:17" in workflow
     assert "scripts/build_database.sh --fixture" in workflow
     # A versão mínima declarada em pyproject.toml precisa estar na matriz.

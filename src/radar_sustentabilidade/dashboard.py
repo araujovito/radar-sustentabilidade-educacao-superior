@@ -50,6 +50,11 @@ def format_ratio(value: float) -> str:
     return f"{value:.1f}".replace(".", ",") + "×"
 
 
+def format_decimal(value: float, decimals: int = 2) -> str:
+    """Formata um decimal sem unidade no padrão brasileiro."""
+    return f"{value:.{decimals}f}".replace(".", ",")
+
+
 def _scale(value: float, lower: float, upper: float, size: float) -> float:
     if upper == lower:
         return size / 2
@@ -544,6 +549,63 @@ FROM analytics.course_supply_snapshot
 WHERE census_year = %(year)s AND offered_seats > 0
 """
 
+TRANSITION_QUERY = """
+WITH first_year AS (
+    SELECT *
+    FROM analytics.modality_portfolio_state
+    WHERE census_year = (
+        SELECT MIN(census_year) FROM analytics.course_supply_snapshot
+    )
+),
+last_year AS (
+    SELECT *
+    FROM analytics.modality_portfolio_state
+    WHERE census_year = %(year)s
+),
+paired AS (
+    SELECT
+        first_year.presencial_seats AS first_presencial_seats,
+        last_year.presencial_seats AS last_presencial_seats,
+        first_year.ead_seats AS first_ead_seats,
+        last_year.ead_seats AS last_ead_seats
+    FROM first_year
+    JOIN last_year USING (institution_id, cine_label_code)
+)
+SELECT
+    COUNT(*) AS surviving_pairs,
+    COUNT(*) FILTER (
+        WHERE last_ead_seats > first_ead_seats
+          AND last_presencial_seats < first_presencial_seats
+    )::NUMERIC / NULLIF(COUNT(*), 0) AS substitution_signal_share,
+    CORR(
+        last_ead_seats - first_ead_seats,
+        last_presencial_seats - first_presencial_seats
+    ) AS seat_change_correlation
+FROM paired
+"""
+
+COMPLETION_QUERY = """
+WITH current_offers AS (
+    SELECT teaching_modality, COUNT(*) AS offers
+    FROM analytics.course_supply_snapshot
+    WHERE census_year = %(year)s AND graduates IS NOT NULL
+    GROUP BY teaching_modality
+)
+SELECT
+    summary.teaching_modality,
+    summary.eligible_offers,
+    summary.eligible_offers::NUMERIC
+        / NULLIF(current_offers.offers, 0) AS coverage_share,
+    summary.aggregate_completion_ratio,
+    summary.median_offer_ratio,
+    summary.exceeds_one_share
+FROM analytics.lagged_completion_summary AS summary
+JOIN current_offers USING (teaching_modality)
+WHERE summary.census_year = %(year)s
+  AND summary.lag_years = 4
+ORDER BY summary.teaching_modality
+"""
+
 
 def render_table(headers: list[str], rows: list[list[str]], caption: str) -> str:
     """Renderiza uma tabela com legenda explicativa."""
@@ -619,6 +681,16 @@ def load_dashboard_data(year: int = 2024, top: int = 12) -> dict:
                 connection,
                 params={"year": year},
             )
+            transition = pd.read_sql(
+                text(TRANSITION_QUERY.replace("%(year)s", ":year")),
+                connection,
+                params={"year": year},
+            )
+            completion = pd.read_sql(
+                text(COMPLETION_QUERY.replace("%(year)s", ":year")),
+                connection,
+                params={"year": year},
+            )
 
             selected_columns = _score_columns(FEATURE_COLUMNS)
             columns = ", ".join(selected_columns)
@@ -690,6 +762,8 @@ def load_dashboard_data(year: int = 2024, top: int = 12) -> dict:
         "concentration": concentration.to_dict("records"),
         "persistence": persistence.to_dict("records"),
         "totals": totals.to_dict("records")[0],
+        "transition": transition.to_dict("records")[0],
+        "completion": completion.to_dict("records"),
         "alerts": alerts.to_dict("records"),
     }
 
@@ -778,6 +852,7 @@ def render_dashboard(data: dict) -> str:
         int(row["teaching_modality"]): row
         for row in data["persistence"]
     }
+    transition = data["transition"]
 
     tiles = "".join(
         [
@@ -854,6 +929,32 @@ def render_dashboard(data: dict) -> str:
         ["Modalidade", "#Ofertas no painel", "#Anos ociosos", "#Volatilidade"],
         persistence_table,
         "Volatilidade é o coeficiente de variação dos ingressantes.",
+    )
+    completion_rows = [
+        [
+            MODALITY_LABELS[int(row["teaching_modality"])],
+            format_integer(int(row["eligible_offers"])),
+            format_percent(float(row["coverage_share"])),
+            format_percent(float(row["aggregate_completion_ratio"])),
+            format_percent(float(row["median_offer_ratio"])),
+            format_percent(float(row["exceeds_one_share"])),
+        ]
+        for row in data["completion"]
+    ]
+    completion_table = render_table(
+        [
+            "Modalidade",
+            "#Ofertas elegíveis",
+            "#Cobertura",
+            "#Razão agregada",
+            "#Mediana",
+            "#Acima de 100%",
+        ],
+        completion_rows,
+        (
+            "Concluintes em 2024 sobre ingressantes da mesma oferta em 2020; "
+            "mínimo de 20 ingressantes no ano-base."
+        ),
     )
     alert_table = render_table(
         [
@@ -969,6 +1070,57 @@ def render_dashboard(data: dict) -> str:
       <strong>Viés de sobrevivência:</strong> somente 12,3% das ofertas EAD
       possuem oito anos ou mais, contra 50,2% do presencial. O painel longo da
       EAD é um subconjunto de ofertas sobreviventes.
+    </div>
+  </section>
+
+  <section aria-labelledby="transicao">
+    <p class="section-kicker">Estrutura do portfólio</p>
+    <h2 id="transicao">Expansão da EAD não significa substituição direta</h2>
+    <p class="lede">
+      A comparação usa IES × área CINE, uma unidade comum às duas modalidades,
+      e acompanha somente os portfólios presentes em {first_year} e {year}.
+    </p>
+    <div class="tiles">
+      {stat_tile(
+          format_percent(current[1].seats / current_seats),
+          "Participação EAD nas vagas",
+          f"{format_percent(first[1].seats / first_seats)} em {first_year}",
+      )}
+      {stat_tile(
+          format_percent(current[1].entrants / current_entrants),
+          "Participação EAD nos ingressantes",
+          "Conversão cresce menos que capacidade",
+      )}
+      {stat_tile(
+          format_percent(float(transition["substitution_signal_share"])),
+          "Sinal de substituição",
+          f"{format_integer(int(transition['surviving_pairs']))} pares sobreviventes",
+      )}
+      {stat_tile(
+          format_decimal(float(transition["seat_change_correlation"])),
+          "Correlação das variações",
+          "EAD versus presencial",
+      )}
+    </div>
+    <div class="caveat">
+      <strong>Leitura:</strong> a EAD domina a expansão, mas o padrão principal
+      é entrada de novos portfólios e dualização. O sinal de substituição é
+      descritivo e não identifica efeito causal.
+    </div>
+  </section>
+
+  <section aria-labelledby="conclusao">
+    <p class="section-kicker">Fluxo com defasagem</p>
+    <h2 id="conclusao">Conclusão melhora com denominador temporal</h2>
+    <p class="lede">
+      A referência de quatro anos aproxima entrada e conclusão; a análise
+      completa preserva também defasagens de três e cinco anos.
+    </p>
+    <div class="panel">{completion_table}</div>
+    <div class="caveat">
+      <strong>Não é taxa de coorte:</strong> o Censo não rastreia indivíduos,
+      transferências nem duração específica. Resultados acima de 100% são
+      mantidos como diagnóstico de mistura de coortes.
     </div>
   </section>
 

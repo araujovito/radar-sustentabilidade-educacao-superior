@@ -29,6 +29,10 @@ from radar_sustentabilidade.longitudinal import (
     year_only_columns,
 )
 from radar_sustentabilidade.milestone3 import write_milestone3_report
+from radar_sustentabilidade.portfolio import (
+    rebuild_portfolio,
+    verify_portfolio_manifest,
+)
 from radar_sustentabilidade.quality import write_course_quality_profile
 from radar_sustentabilidade.sqlgen import generate_raw_sql
 
@@ -182,6 +186,26 @@ def build_milestone3(
     """Gera as métricas de modalidade e conclusão defasada."""
     output_path = write_milestone3_report(output)
     typer.echo(f"relatório em {output_path}")
+
+
+@app.command("build-portfolio")
+def build_portfolio(
+    manifest: Path = Path("reports/portfolio/manifest.json"),
+) -> None:
+    """Reconstrói todos os produtos derivados e o manifesto da entrega."""
+    for output_path in rebuild_portfolio(manifest):
+        typer.echo(output_path)
+
+
+@app.command("verify-portfolio")
+def verify_portfolio(
+    manifest: Path = Path("reports/portfolio/manifest.json"),
+) -> None:
+    """Confere hashes e conteúdo dos artefatos publicados."""
+    result = verify_portfolio_manifest(manifest)
+    typer.echo(
+        f"{result['artifact_count']} artefatos verificados; portfólio íntegro"
+    )
 
 
 @app.command("report-layout-drift")

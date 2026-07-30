@@ -45,6 +45,10 @@ jobs:
       - name: Executar os testes
         run: pytest -q
 
+      - name: Verificar os artefatos de portfolio
+        if: matrix.python-version == '3.12'
+        run: radar verify-portfolio
+
   sql:
     name: Esquema e logica SQL
     runs-on: ubuntu-latest

@@ -8,6 +8,7 @@ from radar_sustentabilidade.cli import app
 from radar_sustentabilidade.dashboard import (
     Point,
     _score_columns,
+    format_decimal,
     format_integer,
     format_millions,
     format_percent,
@@ -86,6 +87,29 @@ def sample_data() -> dict:
             "unconverted": 18_640_000,
             "seats": 23_650_000,
         },
+        "transition": {
+            "surviving_pairs": 17_060,
+            "substitution_signal_share": 0.123,
+            "seat_change_correlation": -0.083,
+        },
+        "completion": [
+            {
+                "teaching_modality": 1,
+                "eligible_offers": 21_541,
+                "coverage_share": 0.619,
+                "aggregate_completion_ratio": 0.403,
+                "median_offer_ratio": 0.367,
+                "exceeds_one_share": 0.039,
+            },
+            {
+                "teaching_modality": 2,
+                "eligible_offers": 3_851,
+                "coverage_share": 0.342,
+                "aggregate_completion_ratio": 0.267,
+                "median_offer_ratio": 0.246,
+                "exceeds_one_share": 0.062,
+            },
+        ],
         "alerts": [
             {
                 "institution_id": 10,
@@ -116,6 +140,7 @@ def test_formatters_use_brazilian_notation() -> None:
     assert format_percent(0.32768) == "32,8%"
     assert format_integer(24_094) == "24.094"
     assert format_ratio(2.918) == "2,9×"
+    assert format_decimal(-0.083) == "-0,08"
 
 
 def test_line_chart_rejects_empty_series() -> None:
@@ -140,6 +165,8 @@ def test_render_dashboard_is_self_contained_and_methodologically_explicit() -> N
     assert "Viés de sobrevivência" in html
     assert "operar pelo ranking" in html
     assert "uma oferta por IES" in html
+    assert "Sinal de substituição" in html
+    assert "Não é taxa de coorte" in html
     assert "Faculdade de Exemplo" in html
     assert 'lang="pt-BR"' in html
 
