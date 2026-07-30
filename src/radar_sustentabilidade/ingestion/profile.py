@@ -112,9 +112,12 @@ def profile_package(archive_path: Path) -> dict:
     """Perfila membros, tabelas, hashes oficiais e dicionário do ZIP."""
     with ZipFile(archive_path) as archive:
         names = archive.namelist()
-        csv_names = [name for name in names if name.lower().endswith(".csv")]
-        xlsx_names = [name for name in names if name.lower().endswith(".xlsx")]
-        txt_names = [name for name in names if name.lower().endswith(".txt")]
+        real_names = [
+            name for name in names if not Path(name).name.startswith("~$")
+        ]
+        csv_names = [name for name in real_names if name.lower().endswith(".csv")]
+        xlsx_names = [name for name in real_names if name.lower().endswith(".xlsx")]
+        txt_names = [name for name in real_names if name.lower().endswith(".txt")]
 
         if len(xlsx_names) != 1:
             raise ValueError(

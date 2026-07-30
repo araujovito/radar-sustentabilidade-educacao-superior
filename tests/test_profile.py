@@ -65,3 +65,28 @@ def test_profiles_official_package_structure(tmp_path: Path) -> None:
     assert tables["cadastro_cursos"]["control_name_matches_member"] is True
     assert tables["cadastro_cursos"]["columns_missing_in_dictionary"] == []
     assert tables["cadastro_ies"]["control_name_matches_member"] is False
+
+
+def test_ignores_office_lock_files_alongside_real_members(tmp_path: Path) -> None:
+    archive_path = tmp_path / "microdados_2023.zip"
+    courses = "NU_ANO_CENSO;CO_CURSO;QT_MAT\n2023;10;100\n".encode("latin-1")
+    institutions = "NU_ANO_CENSO;CO_IES\n2023;1\n".encode("latin-1")
+    control = (
+        f"{hashlib.md5(institutions).hexdigest()} "
+        "*MICRODADOS_CADASTRO_IES_2023.csv\r\n"
+        f"{hashlib.md5(courses).hexdigest()} "
+        "*MICRODADOS_CADASTRO_CURSOS_2023.csv\r\n"
+    )
+
+    with ZipFile(archive_path, "w", compression=ZIP_STORED) as archive:
+        archive.writestr("Anexos/dicionario.xlsx", make_dictionary())
+        archive.writestr("Anexos/~$dicionario.xlsx", b"lock")
+        archive.writestr("dados/MICRODADOS_CADASTRO_CURSOS_2023.CSV", courses)
+        archive.writestr("dados/MICRODADOS_ED_SUP_IES_2023.CSV", institutions)
+        archive.writestr("dados/md5.txt", control)
+        archive.writestr("leia-me/~$leia_me.docx", b"lock")
+
+    profile = profile_package(archive_path)
+
+    assert profile["dictionary_member"] == "Anexos/dicionario.xlsx"
+    assert len(profile["tables"]) == 2
