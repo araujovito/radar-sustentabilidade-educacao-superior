@@ -11,6 +11,7 @@ from radar_sustentabilidade.alerting import (
     write_experiment_report,
 )
 from radar_sustentabilidade.analysis import write_mvp_summary
+from radar_sustentabilidade.dashboard import write_dashboard
 from radar_sustentabilidade.ingestion.archive import (
     extract_csv_members,
     write_inventory,
@@ -160,6 +161,17 @@ def train_alert_model(
             + (f"Brier {brier:.4f}" if brier is not None else "sem calibração")
         )
     typer.echo(f"relatório em {output}")
+
+
+@app.command("build-dashboard")
+def build_dashboard(
+    output: Path = Path("reports/dashboard/index.html"),
+    year: int = 2024,
+    top: int = 12,
+) -> None:
+    """Gera o painel de decisão como HTML autocontido."""
+    output_path = write_dashboard(output, year=year, top=top)
+    typer.echo(f"painel em {output_path}")
 
 
 @app.command("report-layout-drift")

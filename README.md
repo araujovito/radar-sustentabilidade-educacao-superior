@@ -111,6 +111,11 @@ O [relatório executivo](docs/executive_report.md) consolida os achados da séri
 2014-2024 e o desempenho do sistema de alerta, com as limitações que mudam a
 leitura dos números.
 
+O [painel de decisão](reports/dashboard/index.html) transforma os resultados em
+uma leitura executiva autocontida: expansão e ocupação por modalidade,
+concentração de vagas não convertidas, persistência da baixa ocupação e uma
+lista diversificada de ofertas para auditoria prioritária.
+
 ## Decisões registradas
 
 - [Recorte analítico inicial](docs/scope.md)
@@ -172,3 +177,24 @@ radar train-alert-model
 O comando lê `analytics.offer_training_set`, treina com separação cronológica,
 avalia fora do tempo e grava `reports/alerting/experiment.json`. Os achados
 estão em [alerting_findings.md](docs/alerting_findings.md).
+
+## Gerar o painel de decisão
+
+Com o banco longitudinal carregado e o modelo disponível:
+
+```bash
+radar build-dashboard
+```
+
+O comando consulta as camadas analíticas, pontua as ofertas do ano mais recente
+e grava `reports/dashboard/index.html`. O arquivo não depende de servidor,
+bibliotecas JavaScript ou recursos externos: basta abri-lo no navegador. Para
+escolher outro destino:
+
+```bash
+radar build-dashboard --output caminho/painel.html
+```
+
+As probabilidades do modelo não devem ser interpretadas como risco calibrado.
+O painel usa a ordenação relativa e limita a lista a uma oferta por instituição
+para diversificar a auditoria.

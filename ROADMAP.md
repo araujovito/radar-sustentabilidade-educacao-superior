@@ -47,7 +47,7 @@
 
 ## Marco 5 — Produto de portfólio
 
-- [ ] Criar painel orientado a decisões.
+- [x] Criar painel orientado a decisões.
 - [x] Publicar relatório executivo com achados e limitações.
 - [x] Automatizar testes e verificações no GitHub Actions.
 - [ ] Preparar demonstração reproduzível e documentação final.

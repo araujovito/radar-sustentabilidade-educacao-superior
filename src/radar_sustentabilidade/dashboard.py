@@ -11,6 +11,7 @@ qualquer geração de cor.
 
 from dataclasses import dataclass
 from html import escape
+from pathlib import Path
 
 # Slots 1 e 2 da paleta de referência, com os passos próprios de cada modo.
 SERIES_LIGHT = {1: "#2a78d6", 2: "#eb6834"}
@@ -44,6 +45,11 @@ def format_integer(value: int) -> str:
     return f"{value:,}".replace(",", ".")
 
 
+def format_ratio(value: float) -> str:
+    """Formata um multiplicador com vírgula decimal."""
+    return f"{value:.1f}".replace(".", ",") + "×"
+
+
 def _scale(value: float, lower: float, upper: float, size: float) -> float:
     if upper == lower:
         return size / 2
@@ -62,6 +68,9 @@ def line_chart(
     Um eixo apenas. As duas séries recebem rótulo direto no fim da linha, de
     modo que a identidade nunca depende só da cor.
     """
+    if not points:
+        raise ValueError("O gráfico de linha exige ao menos um ponto")
+
     width, height = 720, 300
     left, right, top, bottom = 62, 96, 28, 40
     plot_width = width - left - right
@@ -147,6 +156,9 @@ def ranked_bars(rows: list[dict], value_key: str, label_key: str) -> str:
     A ordenação carrega o significado, então a cor é um único tom sequencial:
     nenhuma identidade categórica está em jogo.
     """
+    if not rows:
+        raise ValueError("O gráfico de barras exige ao menos uma linha")
+
     row_height, gap = 26, 6
     width = 720
     label_width = 268
@@ -170,7 +182,7 @@ def ranked_bars(rows: list[dict], value_key: str, label_key: str) -> str:
             f'<rect x="{label_width}" y="{y}" width="{bar_width:.1f}" '
             f'height="{row_height}" rx="4" class="bar">'
             f"<title>{escape(str(row[label_key]))} · "
-            f"{format_integer(row[value_key])} vagas não convertidas</title>"
+            f"{format_integer(int(row[value_key]))} vagas não convertidas</title>"
             f"</rect>"
         )
         parts.append(
@@ -186,6 +198,9 @@ def ranked_bars(rows: list[dict], value_key: str, label_key: str) -> str:
 
 def paired_bars(rows: list[dict]) -> str:
     """Compara presencial e EAD em cada medida de persistência."""
+    if not rows:
+        raise ValueError("O gráfico comparativo exige ao menos uma linha")
+
     width = 720
     group_height = 62
     label_width = 250
@@ -288,16 +303,50 @@ body {
   font: 16px/1.55 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
         Helvetica, Arial, sans-serif;
 }
-.wrap { max-width: 860px; margin: 0 auto; }
-h1 { font-size: 1.6rem; line-height: 1.25; margin: 0 0 6px; }
+.wrap { max-width: 980px; margin: 0 auto; }
+.masthead {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 20px;
+  margin-bottom: 28px;
+}
+.eyebrow {
+  margin: 0 0 8px;
+  color: var(--series-1);
+  font-size: 0.76rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+h1 { font-size: 1.85rem; line-height: 1.18; margin: 0 0 8px; }
 h2 {
-  font-size: 1.08rem;
+  font-size: 1.18rem;
   margin: 40px 0 4px;
   padding-top: 20px;
   border-top: 1px solid var(--border);
 }
-.subtitle { color: var(--text-secondary); margin: 0 0 28px; }
+.subtitle { color: var(--text-secondary); margin: 0; max-width: 720px; }
 .lede { color: var(--text-secondary); margin: 0 0 18px; font-size: 0.95rem; }
+.theme-toggle {
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--surface-raised);
+  color: var(--text-secondary);
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.8rem;
+  padding: 7px 12px;
+  white-space: nowrap;
+}
+.theme-toggle:hover { color: var(--text-primary); }
+.section-kicker {
+  color: var(--text-muted);
+  font-size: 0.8rem;
+  margin: 0 0 3px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
 .tiles {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
@@ -313,6 +362,25 @@ h2 {
 .tile-value { font-size: 1.7rem; font-weight: 600; letter-spacing: -0.02em; }
 .tile-label { font-size: 0.9rem; color: var(--text-secondary); margin-top: 2px; }
 .tile-note { font-size: 0.8rem; color: var(--text-muted); margin-top: 6px; }
+.split {
+  display: grid;
+  grid-template-columns: minmax(0, 1.25fr) minmax(250px, 0.75fr);
+  gap: 24px;
+  align-items: start;
+}
+.split > * { min-width: 0; }
+.insight {
+  background: var(--surface-raised);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 16px 18px;
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  margin-top: 58px;
+}
+.insight strong { color: var(--text-primary); }
+.insight p:first-child { margin-top: 0; }
+.insight p:last-child { margin-bottom: 0; }
 .panel { overflow-x: auto; margin-top: 14px; }
 .chart { width: 100%; height: auto; min-width: 560px; display: block; }
 .grid { stroke: var(--grid); stroke-width: 1; }
@@ -376,6 +444,17 @@ footer {
   border-top: 1px solid var(--border);
   font-size: 0.82rem;
   color: var(--text-muted);
+}
+@media (max-width: 720px) {
+  body { padding: 22px 14px 44px; }
+  .masthead { display: block; }
+  .theme-toggle { margin-top: 16px; }
+  .split { grid-template-columns: 1fr; }
+  .insight { margin-top: 0; }
+  .tiles { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 440px) {
+  .tiles { grid-template-columns: 1fr; }
 }
 """
 
@@ -492,6 +571,20 @@ def render_table(headers: list[str], rows: list[list[str]], caption: str) -> str
     )
 
 
+def _score_columns(feature_columns: list[str]) -> list[str]:
+    """Combina identificadores e atributos sem repetir nomes."""
+    return list(
+        dict.fromkeys(
+            [
+                "institution_id",
+                "course_id",
+                "reference_year",
+                *feature_columns,
+            ]
+        )
+    )
+
+
 def load_dashboard_data(year: int = 2024, top: int = 12) -> dict:
     """Lê do PostgreSQL tudo o que o painel mostra."""
     import pandas as pd
@@ -527,9 +620,11 @@ def load_dashboard_data(year: int = 2024, top: int = 12) -> dict:
                 params={"year": year},
             )
 
-            columns = ", ".join(
-                ["institution_id", "course_id", "teaching_modality",
-                 "reference_year", *FEATURE_COLUMNS]
+            selected_columns = _score_columns(FEATURE_COLUMNS)
+            columns = ", ".join(selected_columns)
+            scoring_columns = ", ".join(
+                f"features.{column}"
+                for column in selected_columns
             )
             labelled = pd.read_sql(
                 text(
@@ -540,9 +635,16 @@ def load_dashboard_data(year: int = 2024, top: int = 12) -> dict:
             )
             scoring = pd.read_sql(
                 text(
-                    f"SELECT {columns}, course_name "
-                    "FROM analytics.offer_features "
-                    "WHERE reference_year = :year AND enrollments >= 20"
+                    f"SELECT {scoring_columns}, snapshot.course_name "
+                    "FROM analytics.offer_features AS features "
+                    "JOIN analytics.course_supply_snapshot AS snapshot "
+                    "  ON snapshot.institution_id = features.institution_id "
+                    " AND snapshot.course_id = features.course_id "
+                    " AND snapshot.teaching_modality = "
+                    "features.teaching_modality "
+                    " AND snapshot.census_year = features.reference_year "
+                    "WHERE features.reference_year = :year "
+                    "AND features.enrollments >= 20"
                 ),
                 connection,
                 params={"year": year},
@@ -562,7 +664,11 @@ def load_dashboard_data(year: int = 2024, top: int = 12) -> dict:
     scoring = scoring.copy()
     scoring["risk"] = score_year(labelled, scoring)
     scoring = scoring.merge(names, on="institution_id", how="left")
-    alerts = scoring.sort_values("risk", ascending=False).head(15)
+    alerts = (
+        scoring.sort_values("risk", ascending=False)
+        .drop_duplicates("institution_id")
+        .head(15)
+    )
 
     points = [
         Point(
@@ -586,3 +692,326 @@ def load_dashboard_data(year: int = 2024, top: int = 12) -> dict:
         "totals": totals.to_dict("records")[0],
         "alerts": alerts.to_dict("records"),
     }
+
+
+def _point(points: list[Point], year: int, modality: int) -> Point:
+    for point in points:
+        if point.year == year and point.modality == modality:
+            return point
+    raise ValueError(f"Série sem modalidade {modality} no ano {year}")
+
+
+def _persistence_rows(rows: list[dict]) -> list[dict]:
+    by_modality = {
+        int(row["teaching_modality"]): row
+        for row in rows
+    }
+    missing = {1, 2} - set(by_modality)
+    if missing:
+        raise ValueError(f"Persistência sem modalidades: {sorted(missing)}")
+    return [
+        {
+            "label": "Anos com baixa ocupação",
+            1: float(by_modality[1]["mean_low_share"]),
+            2: float(by_modality[2]["mean_low_share"]),
+            "maximum": 0.6,
+            "fmt": format_percent,
+        },
+        {
+            "label": "Sempre abaixo de 25%",
+            1: float(by_modality[1]["always_idle_share"]),
+            2: float(by_modality[2]["always_idle_share"]),
+            "maximum": 0.25,
+            "fmt": format_percent,
+        },
+        {
+            "label": "Sequência de 5+ anos",
+            1: float(by_modality[1]["long_streak_share"]),
+            2: float(by_modality[2]["long_streak_share"]),
+            "maximum": 0.35,
+            "fmt": format_percent,
+        },
+    ]
+
+
+def _alert_rows(alerts: list[dict]) -> list[list[str]]:
+    rows = []
+    for position, row in enumerate(alerts, start=1):
+        institution = row.get("institution_name") or f"IES {row['institution_id']}"
+        state = row.get("institution_state") or "—"
+        rows.append(
+            [
+                str(position),
+                str(institution),
+                state,
+                str(row.get("course_name") or f"Curso {row['course_id']}"),
+                MODALITY_LABELS[int(row["teaching_modality"])],
+                format_integer(int(row["enrollments"])),
+            ]
+        )
+    return rows
+
+
+def render_dashboard(data: dict) -> str:
+    """Monta o painel completo como um documento HTML autocontido."""
+    points = data["points"]
+    if not points:
+        raise ValueError("O painel exige uma série temporal")
+
+    year = int(data["year"])
+    first_year = min(point.year for point in points)
+    current = [_point(points, year, modality) for modality in (1, 2)]
+    first = [_point(points, first_year, modality) for modality in (1, 2)]
+    current_seats = sum(point.seats for point in current)
+    current_entrants = sum(point.entrants for point in current)
+    first_seats = sum(point.seats for point in first)
+    first_entrants = sum(point.entrants for point in first)
+    total_occupancy = current_entrants / current_seats
+    first_occupancy = first_entrants / first_seats
+
+    totals = data["totals"]
+    concentration = {
+        int(row["position"]): float(row["cumulative_share"])
+        for row in data["concentration"]
+    }
+    persistence = {
+        int(row["teaching_modality"]): row
+        for row in data["persistence"]
+    }
+
+    tiles = "".join(
+        [
+            stat_tile(
+                format_millions(current_seats),
+                f"Vagas declaradas em {year}",
+                f"{format_ratio(current_seats / first_seats)} "
+                f"o volume de {first_year}",
+            ),
+            stat_tile(
+                format_millions(current_entrants),
+                f"Ingressantes em {year}",
+                f"{(current_entrants / first_entrants - 1):.0%} desde {first_year}",
+            ),
+            stat_tile(
+                format_percent(total_occupancy),
+                "Ocupação geral",
+                f"{format_percent(first_occupancy)} em {first_year}",
+            ),
+            stat_tile(
+                format_millions(float(totals["unconverted"])),
+                "Vagas não convertidas",
+                f"{format_integer(int(totals['institutions']))} IES com capacidade",
+            ),
+        ]
+    )
+
+    institution_rows = [
+        [
+            str(row["institution_name"]),
+            str(row.get("institution_state") or "—"),
+            format_millions(float(row["unconverted"])),
+            format_percent(float(row["occupancy"])),
+        ]
+        for row in data["institutions"]
+    ]
+    persistence_table = [
+        [
+            MODALITY_LABELS[modality],
+            format_integer(int(persistence[modality]["offers"])),
+            format_percent(float(persistence[modality]["mean_low_share"])),
+            format_percent(float(persistence[modality]["mean_volatility"])),
+        ]
+        for modality in (1, 2)
+    ]
+    seats_chart = line_chart(
+        points,
+        "seats",
+        "Vagas declaradas por modalidade",
+        format_millions,
+    )
+    occupancy_chart = line_chart(
+        points,
+        "occupancy",
+        "Ocupação por modalidade",
+        format_percent,
+        y_max=0.55,
+    )
+    institution_chart = ranked_bars(
+        data["institutions"],
+        "unconverted",
+        "institution_name",
+    )
+    institution_table = render_table(
+        ["Instituição", "UF", "#Vagas não convertidas", "#Ocupação"],
+        institution_rows,
+        (
+            "Ranking de capacidade declarada não convertida em ingressantes; "
+            f"ano de referência {year}."
+        ),
+    )
+    persistence_chart = paired_bars(_persistence_rows(data["persistence"]))
+    persistence_table_html = render_table(
+        ["Modalidade", "#Ofertas no painel", "#Anos ociosos", "#Volatilidade"],
+        persistence_table,
+        "Volatilidade é o coeficiente de variação dos ingressantes.",
+    )
+    alert_table = render_table(
+        [
+            "#Prioridade",
+            "Instituição",
+            "UF",
+            "Curso",
+            "Modalidade",
+            "#Matrículas",
+        ],
+        _alert_rows(data["alerts"]),
+        f"Ranking prospectivo; o horizonte de {year} ainda não possui rótulo.",
+    )
+
+    return f"""<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description"
+        content="Sustentabilidade da oferta de educação superior, 2014 a 2024.">
+  <title>Radar de Sustentabilidade da Educação Superior</title>
+  <style>{STYLE}</style>
+</head>
+<body>
+<main class="wrap">
+  <header class="masthead">
+    <div>
+      <p class="eyebrow">Censo da Educação Superior · 2014–{year}</p>
+      <h1>Radar de Sustentabilidade da Educação Superior</h1>
+      <p class="subtitle">
+        Onde a oferta cresce sem converter capacidade em ingressantes — e quais
+        cursos apresentam sinais antecipados de deterioração.
+      </p>
+    </div>
+    <button class="theme-toggle" type="button" onclick="toggleTheme()"
+            aria-label="Alternar tema">Alternar tema</button>
+  </header>
+
+  <section aria-labelledby="panorama">
+    <p class="section-kicker">Panorama nacional</p>
+    <h2 id="panorama">A capacidade quase triplicou; a ocupação recuou</h2>
+    <p class="lede">
+      A leitura combina escala, conversão e persistência. Vagas são capacidade
+      declarada no Censo, não necessariamente capacidade física.
+    </p>
+    <div class="tiles">{tiles}</div>
+    <div class="split">
+      <div>
+        <h2>Expansão por modalidade</h2>
+        <p class="lede">
+          Praticamente toda a expansão veio da EAD; o volume presencial
+          permaneceu estável.
+        </p>
+        <div class="panel">{seats_chart}</div>
+        {legend()}
+      </div>
+      <aside class="insight">
+        <p>
+          <strong>
+            EAD: {format_ratio(current[1].seats / first[1].seats)} mais vagas.
+          </strong>
+        </p>
+        <p>
+          De {format_millions(first[1].seats)} para
+          {format_millions(current[1].seats)}, enquanto o presencial passou de
+          {format_millions(first[0].seats)} para
+          {format_millions(current[0].seats)}.
+        </p>
+      </aside>
+    </div>
+    <h2>Conversão da capacidade</h2>
+    <p class="lede">
+      Ingressantes divididos por vagas declaradas. A distância entre
+      modalidades persiste em toda a série.
+    </p>
+    <div class="panel">{occupancy_chart}</div>
+    {legend()}
+  </section>
+
+  <section aria-labelledby="concentracao">
+    <p class="section-kicker">Priorização</p>
+    <h2 id="concentracao">A capacidade não convertida está concentrada</h2>
+    <p class="lede">
+      Poucas instituições cobrem grande parte do fenômeno, tornando uma
+      auditoria focalizada mais eficiente que uma varredura censitária.
+    </p>
+    <div class="tiles">
+      {stat_tile(format_percent(concentration[1]), "1 IES", "Participação acumulada")}
+      {stat_tile(format_percent(concentration[10]), "10 IES", "Participação acumulada")}
+      {stat_tile(format_percent(concentration[50]), "50 IES", "Participação acumulada")}
+    </div>
+    <div class="panel">{institution_chart}</div>
+    <div class="panel">{institution_table}</div>
+    <div class="caveat">
+      <strong>Como interpretar:</strong> vaga declarada pode representar teto
+      regulatório ou comercial. O ranking identifica escala de não conversão;
+      não prova ineficiência financeira nem falta de estrutura.
+    </div>
+  </section>
+
+  <section aria-labelledby="persistencia">
+    <p class="section-kicker">Diagnóstico longitudinal</p>
+    <h2 id="persistencia">A baixa ocupação da EAD é persistente</h2>
+    <p class="lede">
+      Ofertas com ao menos oito anos mensuráveis e sem lacunas. Baixa ocupação
+      significa menos de 25% das vagas convertidas em ingressantes.
+    </p>
+    <div class="panel">{persistence_chart}</div>
+    {legend()}
+    <div class="panel">{persistence_table_html}</div>
+    <div class="caveat">
+      <strong>Viés de sobrevivência:</strong> somente 12,3% das ofertas EAD
+      possuem oito anos ou mais, contra 50,2% do presencial. O painel longo da
+      EAD é um subconjunto de ofertas sobreviventes.
+    </div>
+  </section>
+
+  <section aria-labelledby="alertas">
+    <p class="section-kicker">Ação antecipada</p>
+    <h2 id="alertas">Ofertas para auditoria prioritária em {year}</h2>
+    <p class="lede">
+      Uma oferta por instituição, ordenada pelo sinal do modelo. O evento
+      previsto é queda superior a 50% das matrículas ou desaparecimento em
+      dois anos.
+    </p>
+    <div class="panel">{alert_table}</div>
+    <div class="caveat">
+      <strong>Uso correto:</strong> operar pelo ranking, não por limiar de
+      probabilidade. O modelo é superconfiante fora do tempo; a lista limita
+      uma oferta por IES para diversificar a capacidade de auditoria.
+    </div>
+  </section>
+
+  <footer>
+    Fonte: Microdados do Censo da Educação Superior, Inep. Elaboração própria.
+    Recorte: graduação no Brasil; dimensão exterior excluída.
+  </footer>
+</main>
+<script>
+function toggleTheme() {{
+  const root = document.documentElement;
+  const current = root.dataset.theme;
+  root.dataset.theme = current === "dark" ? "light" : "dark";
+}}
+</script>
+</body>
+</html>
+"""
+
+
+def write_dashboard(
+    output_path: Path,
+    year: int = 2024,
+    top: int = 12,
+) -> Path:
+    """Carrega os dados e persiste o painel autocontido."""
+    html = render_dashboard(load_dashboard_data(year=year, top=top))
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+    output_path.write_text(html, encoding="utf-8")
+    return output_path
