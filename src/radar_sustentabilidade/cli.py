@@ -6,6 +6,10 @@ from pathlib import Path
 import typer
 
 from radar_sustentabilidade import __version__
+from radar_sustentabilidade.alerting import (
+    load_training_set,
+    write_experiment_report,
+)
 from radar_sustentabilidade.analysis import write_mvp_summary
 from radar_sustentabilidade.ingestion.archive import (
     extract_csv_members,
@@ -136,6 +140,26 @@ def generate_longitudinal(
     years = list(range(start_year, end_year + 1))
     output_path = generate_longitudinal_sql(reports_dir, years, output_dir)
     typer.echo(output_path)
+
+
+@app.command("train-alert-model")
+def train_alert_model(
+    output: Path = Path("reports/alerting/experiment.json"),
+) -> None:
+    """Treina e avalia fora do tempo o modelo de alerta de deterioração."""
+    frame = load_training_set()
+    report = write_experiment_report(frame, output)
+    for evaluation in report["evaluations"]:
+        if evaluation["split"] != "teste":
+            continue
+        brier = evaluation["brier_score"]
+        typer.echo(
+            f"{evaluation['model_name']}: "
+            f"AUC {evaluation['roc_auc']:.4f}, "
+            f"AP {evaluation['average_precision']:.4f}, "
+            + (f"Brier {brier:.4f}" if brier is not None else "sem calibração")
+        )
+    typer.echo(f"relatório em {output}")
 
 
 @app.command("report-layout-drift")

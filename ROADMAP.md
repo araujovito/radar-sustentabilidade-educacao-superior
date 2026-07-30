@@ -38,11 +38,11 @@
 
 ## Marco 4 — Sistema de alerta
 
-- [ ] Definir evento de deterioração em horizonte de dois anos.
-- [ ] Criar tabela de atributos sem vazamento temporal.
-- [ ] Estabelecer modelo de referência interpretável.
-- [ ] Comparar modelos e calibrar probabilidades.
-- [ ] Avaliar desempenho fora do tempo e `precision@k`.
+- [x] Definir evento de deterioração em horizonte de dois anos.
+- [x] Criar tabela de atributos sem vazamento temporal.
+- [x] Estabelecer modelo de referência interpretável.
+- [x] Comparar modelos e calibrar probabilidades.
+- [x] Avaliar desempenho fora do tempo e `precision@k`.
 - [ ] Produzir explicações por previsão e análise de estabilidade.
 
 ## Marco 5 — Produto de portfólio

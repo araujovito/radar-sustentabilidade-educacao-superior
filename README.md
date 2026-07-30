@@ -113,6 +113,7 @@ O planejamento detalhado está em [ROADMAP.md](ROADMAP.md).
 - [Achados analíticos do MVP 2024](docs/mvp_2024_findings.md)
 - [Mudanças de leiaute entre edições](docs/layout_changes.md)
 - [Persistência e volatilidade na série 2014-2024](docs/persistence_findings.md)
+- [Sistema de alerta de deterioração](docs/alerting_findings.md)
 
 ## Executar o MVP 2024
 
@@ -125,3 +126,15 @@ radar build-mvp
 O comando processa o arquivo de cursos em blocos, reconcilia as dimensões da
 EAD e grava `reports/2024/mvp_summary.json`. Os microdados permanecem fora do
 Git.
+
+## Treinar o modelo de alerta
+
+Com a série 2014-2024 carregada no PostgreSQL:
+
+```bash
+radar train-alert-model
+```
+
+O comando lê `analytics.offer_training_set`, treina com separação cronológica,
+avalia fora do tempo e grava `reports/alerting/experiment.json`. Os achados
+estão em [alerting_findings.md](docs/alerting_findings.md).
