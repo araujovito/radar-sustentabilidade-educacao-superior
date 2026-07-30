@@ -105,6 +105,12 @@ radar import-file inep_censo_superior_microdados_2024 caminho/arquivo.zip
 
 O planejamento detalhado está em [ROADMAP.md](ROADMAP.md).
 
+## Resultado
+
+O [relatório executivo](docs/executive_report.md) consolida os achados da série
+2014-2024 e o desempenho do sistema de alerta, com as limitações que mudam a
+leitura dos números.
+
 ## Decisões registradas
 
 - [Recorte analítico inicial](docs/scope.md)
