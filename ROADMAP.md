@@ -23,7 +23,7 @@
 - [x] Criar a visão analítica por instituição, curso e modalidade.
 - [x] Reconciliar oferta e alunos nas dimensões específicas da EAD.
 - [x] Implementar testes de unicidade, integridade e reconciliação.
-- [ ] Executar a carga completa no PostgreSQL local.
+- [x] Executar a carga completa no PostgreSQL local.
 
 ## Marco 3 — Métricas e hipóteses
 
