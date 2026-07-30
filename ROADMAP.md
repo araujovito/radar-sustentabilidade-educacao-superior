@@ -30,8 +30,8 @@
 ## Marco 3 — Métricas e hipóteses
 
 - [x] Definir taxa de ocupação com denominadores comparáveis.
-- [ ] Construir indicador de capacidade ociosa persistente.
-- [ ] Medir volatilidade da demanda e persistência do crescimento.
+- [x] Construir indicador de capacidade ociosa persistente.
+- [x] Medir volatilidade da demanda e persistência do crescimento.
 - [x] Calcular concentração do portfólio por instituição.
 - [ ] Estudar transição e dependência entre presencial e EAD.
 - [ ] Validar uma medida de eficiência de conclusão com defasagem.

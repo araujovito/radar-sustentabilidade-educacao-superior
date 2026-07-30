@@ -99,6 +99,50 @@ def test_staging_assertions_cover_typing_and_the_2020_convention() -> None:
     assert "unexpected_blank_convention_count" in assertions
 
 
+def test_longitudinal_mart_keeps_the_validated_ead_reconciliation() -> None:
+    analytics = (
+        PROJECT_ROOT
+        / "sql"
+        / "analytics"
+        / "031_course_supply_longitudinal.sql"
+    ).read_text(encoding="utf-8")
+
+    assert "staging.courses" in analytics
+    assert "staging.courses_2024" not in analytics
+    assert "dimension_type = 1" in analytics
+    assert "dimension_type = 2" in analytics
+    assert "dimension_type = 3" in analytics
+    # A dimensão 4 é oferta no exterior e fica fora do recorte brasileiro.
+    assert "dimension_type = 4" not in analytics
+    assert "FULL OUTER JOIN ead_students" in analytics
+    # A rede vem do arquivo de cursos, não da view de IES.
+    assert "education_network" in analytics
+
+
+def test_persistence_excludes_offers_without_declared_capacity() -> None:
+    persistence = (
+        PROJECT_ROOT / "sql" / "analytics" / "032_course_persistence.sql"
+    ).read_text(encoding="utf-8")
+
+    assert "has_measurable_occupancy" in persistence
+    assert "WHERE has_measurable_occupancy" in persistence
+    assert "current_low_occupancy_streak" in persistence
+    assert "demand_volatility" in persistence
+    # O painel lê a materialização, não a view que reconstrói a união.
+    assert "FROM analytics.course_supply_snapshot" in persistence
+
+
+def test_persistence_assertions_include_the_2024_regression() -> None:
+    assertions = (
+        PROJECT_ROOT / "sql" / "quality" / "043_assertions_persistence.sql"
+    ).read_text(encoding="utf-8")
+
+    assert "regression_against_2024_count" in assertions
+    assert "snapshot_drift_count" in assertions
+    assert "impossible_count_rows" in assertions
+    assert "unmeasurable_flagged_low_count" in assertions
+
+
 def test_analytics_reconciles_ead_dimensions() -> None:
     analytics = (
         PROJECT_ROOT

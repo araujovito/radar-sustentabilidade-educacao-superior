@@ -103,6 +103,36 @@ No EAD, capacidade e demanda estudantil são reconciliadas:
 
 A dimensão 4, referente ao exterior, não participa do MVP.
 
+### `analytics` longitudinal
+
+`analytics.course_supply` aplica ano a ano a mesma reconciliação validada em
+2024. A equivalência é verificada, não presumida: uma asserção compara o
+recorte de 2024 do mart longitudinal com `analytics.course_supply_2024` nas
+duas direções e exige diferença vazia.
+
+Como as views reconstroem a união das onze edições a cada consulta, o resultado
+é materializado em `analytics.course_supply_snapshot` (439.353 ofertas-ano, com
+índices pelas chaves do painel). O painel e as métricas de persistência leem a
+materialização; reconstruir a união a cada consulta torna o uso interativo
+inviável.
+
+Sobre ela ficam:
+
+- `analytics.course_supply_panel`: uma linha por oferta e ano, com ocupação e
+  as marcas `has_measurable_occupancy` e `is_low_occupancy`;
+- `analytics.course_persistence`: uma linha por oferta, com anos ociosos,
+  sequência ociosa atual, volatilidade da demanda e cobertura do painel.
+
+Ofertas com zero vagas declaradas ficam fora do cálculo de ociosidade: são não
+mensuráveis, não ociosas. Os achados estão em
+[persistence_findings.md](persistence_findings.md).
+
+Reconstruir depois de recarregar qualquer edição:
+
+```bash
+psql -f sql/analytics/033_materialize_supply.sql
+```
+
 ## Métricas
 
 - `seat_occupancy_rate`: ingressantes divididos por vagas;
