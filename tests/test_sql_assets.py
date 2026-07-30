@@ -63,6 +63,42 @@ def test_longitudinal_assertions_check_grain_and_normalization() -> None:
     assert "invalid_dimension_count" in assertions
 
 
+def test_longitudinal_staging_sources_network_from_the_course_file() -> None:
+    staging = (
+        PROJECT_ROOT
+        / "sql"
+        / "staging"
+        / "021_staging_longitudinal.sql"
+    ).read_text(encoding="utf-8")
+
+    courses, institutions = staging.split(
+        "CREATE OR REPLACE VIEW staging.institutions"
+    )
+
+    assert "raw.censo_superior_cursos_todos" in courses
+    assert "raw.censo_superior_ies_todos" in institutions
+    # TP_REDE só existe no arquivo de IES a partir de 2023, então a view
+    # longitudinal de instituições não pode expô-la.
+    assert "education_network" in courses
+    assert "education_network" not in institutions
+    # As views longitudinais não carregam sufixo de ano: o ano é uma coluna.
+    assert "staging.courses_2024" not in staging
+
+
+def test_staging_assertions_cover_typing_and_the_2020_convention() -> None:
+    assertions = (
+        PROJECT_ROOT
+        / "sql"
+        / "quality"
+        / "042_assertions_staging_longitudinal.sql"
+    ).read_text(encoding="utf-8")
+
+    assert "unparsed_key_count" in assertions
+    assert "missing_edition_count" in assertions
+    assert "null_capacity_count" in assertions
+    assert "unexpected_blank_convention_count" in assertions
+
+
 def test_analytics_reconciles_ead_dimensions() -> None:
     analytics = (
         PROJECT_ROOT

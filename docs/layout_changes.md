@@ -146,6 +146,47 @@ Isso confirma a nota já registrada em
   CSV ausente do dicionário — mais consistente que o de 2024, que lista três
   variáveis inexistentes no cabeçalho real (ver achados de 2024).
 
+## Mudança de convenção para medidas inaplicáveis (2020)
+
+Esta mudança não aparece na comparação de cabeçalhos: nenhuma coluna entra ou
+sai. Ela só ficou visível ao tipar a série inteira em `staging`.
+
+Cada dimensão carrega apenas parte das medidas. A dimensão 3 (oferta EAD
+nacional) não descreve alunos, e a dimensão 2 (alunos EAD por localidade) não
+descreve capacidade. O que mudou foi **como o arquivo representa a medida que
+não se aplica**:
+
+| Edições | Medida inaplicável à dimensão |
+|---|---|
+| 2014 a 2019 | campo vazio, que vira `NULL` na tipagem |
+| 2020 a 2024 | valor literal `0` |
+
+A transição é limpa e sem exceções. Em 2019, todas as 4.531 linhas da dimensão
+3 têm ingressantes vazios e todas as 212.197 linhas da dimensão 2 têm vagas
+vazias. Em 2020, nenhuma tem.
+
+### Por que isso importa
+
+O significado não mudou — ambos os padrões dizem "esta medida não se aplica a
+esta dimensão". O risco é estatístico, não semântico:
+
+- `SUM` não é afetado: nulo e zero contribuem igualmente nada;
+- `AVG` e `COUNT` **são** afetados: até 2019 as linhas inaplicáveis ficam fora
+  do denominador; de 2020 em diante entram como zero e derrubam a média;
+- uma série de "vagas médias por oferta" calculada sem cuidado mostraria uma
+  queda abrupta em 2020 que é puro artefato de publicação.
+
+As métricas do MVP não são afetadas, porque a reconciliação já toma capacidade
+apenas das dimensões 1 e 3 e alunos apenas das dimensões 1 e 2 — recortes em
+que a medida sempre se aplica e nunca vem vazia. As asserções em
+`sql/quality/042_assertions_staging_longitudinal.sql` verificam essas duas
+garantias e também fixam o padrão observado, de modo que uma edição futura que
+volte a mudar a convenção falhe de forma visível.
+
+Regra geral para a série: qualquer indicador que use média, contagem ou desvio
+padrão sobre uma medida deve filtrar explicitamente as dimensões em que essa
+medida se aplica, em vez de confiar na ausência de nulos.
+
 ## Conclusão para a camada longitudinal
 
 A série 2014–2024 é viável. As 200 colunas presentes em 2014 seguem presentes
@@ -163,7 +204,11 @@ Regras que a união longitudinal deve seguir:
 4. restringir o mart longitudinal à interseção documentada de colunas;
 5. manter fora do mart as colunas presentes em uma única edição;
 6. tratar reserva de vagas por critério étnico/racial como série interrompida
-   em 2024, não como continuidade.
+   em 2024, não como continuidade;
+7. obter rede de ensino do arquivo de cursos, onde `TP_REDE` existe desde
+   2014, e não do arquivo de IES, onde só aparece em 2023;
+8. filtrar dimensões antes de qualquer média, contagem ou desvio padrão, pela
+   mudança de convenção de 2020 descrita acima.
 
 ## Próximas edições
 

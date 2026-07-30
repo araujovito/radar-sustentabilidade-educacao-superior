@@ -25,6 +25,7 @@
 - [x] Implementar testes de unicidade, integridade e reconciliação.
 - [x] Executar a carga completa no PostgreSQL local.
 - [x] Criar a camada `raw` longitudinal de 2014 a 2024.
+- [x] Padronizar tipos e chaves da série em `staging`.
 
 ## Marco 3 — Métricas e hipóteses
 

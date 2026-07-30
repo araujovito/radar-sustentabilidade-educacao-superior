@@ -62,6 +62,29 @@ As views de staging:
 - preservam os códigos originais;
 - não agregam dimensões geográficas.
 
+### `staging` longitudinal
+
+`staging.courses` e `staging.institutions` — sem sufixo de ano — cobrem 2014 a
+2024 lendo as uniões de `raw`. O ano é uma coluna, não um nome de objeto.
+
+Duas diferenças em relação às views de 2024:
+
+- `staging.courses` expõe `education_network`, tipada de `TP_REDE` do arquivo
+  de cursos, presente em todas as edições;
+- `staging.institutions` **não** expõe `education_network`, porque `TP_REDE`
+  só entra no arquivo de IES em 2023. Quem precisa de rede em toda a série usa
+  a view de cursos.
+
+A tipagem foi verificada nas 3.558.875 linhas: nenhuma chave se perde em
+nenhuma edição. As asserções ficam em
+`sql/quality/042_assertions_staging_longitudinal.sql`.
+
+Uma mudança de convenção em 2020 — medidas inaplicáveis a uma dimensão passam
+de campo vazio para zero — está documentada em
+[layout_changes.md](layout_changes.md) e coberta por asserção. Ela não afeta as
+métricas do MVP, mas afeta qualquer média ou contagem calculada sem filtrar
+dimensão.
+
 ### `analytics`
 
 O mart `analytics.course_supply_2024` possui o grão:
