@@ -143,6 +143,70 @@ def test_persistence_assertions_include_the_2024_regression() -> None:
     assert "unmeasurable_flagged_low_count" in assertions
 
 
+def test_features_never_read_the_retrospective_persistence_mart() -> None:
+    features = (
+        PROJECT_ROOT / "sql" / "analytics" / "035_offer_features.sql"
+    ).read_text(encoding="utf-8")
+
+    # Comentários citam o mart retrospectivo justamente para explicar por que
+    # ele não entra. A verificação vale sobre o SQL efetivo.
+    statements = "\n".join(
+        line
+        for line in features.splitlines()
+        if not line.strip().startswith("--")
+    )
+
+    # course_persistence resume a série inteira, inclusive anos futuros a cada
+    # observação. Lê-lo como atributo seria vazamento direto.
+    assert "course_persistence" not in statements
+    # Toda janela acumulada precisa terminar na linha corrente.
+    assert "ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW" in statements
+    assert "UNBOUNDED FOLLOWING" not in statements
+    assert "ROWS BETWEEN CURRENT ROW" not in statements
+    # Defasagens por aritmética de ano, porque a série tem lacunas.
+    assert "LAG(" not in statements.upper()
+    assert "census_year - 1" in statements
+    assert "census_year - 2" in statements
+
+
+def test_labels_use_a_two_year_horizon_on_the_enrollment_stock() -> None:
+    labels = (
+        PROJECT_ROOT / "sql" / "analytics" / "034_deterioration_labels.sql"
+    ).read_text(encoding="utf-8")
+
+    assert "reference_year + 2" in labels
+    assert "0.5 * base_enrollments" in labels
+    assert "disappeared_from_census" in labels
+    # O rótulo não pode existir quando o horizonte sai da série carregada.
+    assert "label_is_observable" in labels
+    # LEAD saltaria lacunas e compararia anos não adjacentes.
+    assert "LEAD(" not in labels.upper()
+
+
+def test_split_is_chronological_and_not_random() -> None:
+    training = (
+        PROJECT_ROOT / "sql" / "analytics" / "036_training_set.sql"
+    ).read_text(encoding="utf-8")
+
+    assert "BETWEEN 2016 AND 2020 THEN 'treino'" in training
+    assert "BETWEEN 2021 AND 2022 THEN 'teste'" in training
+    assert "RANDOM()" not in training.upper()
+    # Escala mínima documentada para o rótulo não medir ruído.
+    assert "base_enrollments >= 20" in training
+
+
+def test_feature_assertions_prove_absence_of_leakage() -> None:
+    assertions = (
+        PROJECT_ROOT / "sql" / "quality" / "044_assertions_features.sql"
+    ).read_text(encoding="utf-8")
+
+    assert "temporal_leakage_count" in assertions
+    # A prova recomputa sobre a série truncada em vez de inspecionar o SQL.
+    assert "WHERE census_year <= 2019" in assertions
+    assert "non_chronological_split_count" in assertions
+    assert "label_beyond_series_count" in assertions
+
+
 def test_analytics_reconciles_ead_dimensions() -> None:
     analytics = (
         PROJECT_ROOT
