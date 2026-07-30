@@ -1,5 +1,7 @@
 # Radar de Sustentabilidade da Educação Superior
 
+[![verificacao](https://github.com/araujovito/radar-sustentabilidade-educacao-superior/actions/workflows/verificacao.yml/badge.svg)](https://github.com/araujovito/radar-sustentabilidade-educacao-superior/actions/workflows/verificacao.yml)
+
 Projeto analítico em Python e SQL para investigar a capacidade, a conversão, a
 eficiência e a sustentabilidade da oferta de educação superior no Brasil.
 
@@ -126,6 +128,32 @@ radar build-mvp
 O comando processa o arquivo de cursos em blocos, reconcilia as dimensões da
 EAD e grava `reports/2024/mvp_summary.json`. Os microdados permanecem fora do
 Git.
+
+## Verificação automatizada
+
+Cada push executa dois trabalhos no GitHub Actions:
+
+- **qualidade** — `ruff` e `pytest` em Python 3.11 e 3.12;
+- **sql** — sobe um PostgreSQL 17, aplica todos os esquemas e views na ordem de
+  dependência, carrega um fixture sintético e confere o comportamento.
+
+O fixture em `sql/fixtures` não são dados do Inep: são poucas ofertas
+construídas para exercitar o que erra em silêncio — reconciliação das
+dimensões da EAD, exclusão da oferta no exterior, normalização da grafia
+divergente de 2020, rotulagem por queda de matrículas e por desaparecimento, e
+ausência de informação futura nos atributos. Um banco vazio faria as consultas
+passarem vaziamente, provando apenas que o SQL compila.
+
+Para reproduzir localmente, com as variáveis do libpq apontando para o banco:
+
+```bash
+scripts/build_database.sh --fixture
+```
+
+Os arquivos de `sql/quality` são diagnósticos: imprimem contagens sobre a base
+completa para leitura humana e não interrompem em divergência. Eles não
+substituem o gate automatizado, e a verificação de integridade dos dados
+oficiais continua sendo manual, porque os microdados não são versionados.
 
 ## Treinar o modelo de alerta
 

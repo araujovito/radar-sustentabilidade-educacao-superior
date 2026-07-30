@@ -207,6 +207,57 @@ def test_feature_assertions_prove_absence_of_leakage() -> None:
     assert "label_beyond_series_count" in assertions
 
 
+def test_materialization_reloads_without_dropping_dependent_views() -> None:
+    script = (
+        PROJECT_ROOT / "sql" / "analytics" / "033_materialize_supply.sql"
+    ).read_text(encoding="utf-8")
+
+    statements = "\n".join(
+        line
+        for line in script.splitlines()
+        if not line.strip().startswith("--")
+    )
+
+    # DROP TABLE falha quando course_supply_panel, offer_features e as demais
+    # views dependentes já existem; DROP ... CASCADE passaria, mas apagaria as
+    # views em silêncio. A recarga precisa ser por TRUNCATE e INSERT.
+    assert "DROP TABLE" not in statements
+    assert "CASCADE" not in statements
+    assert "TRUNCATE TABLE analytics.course_supply_snapshot" in statements
+    assert "INSERT INTO analytics.course_supply_snapshot" in statements
+    assert "CREATE TABLE IF NOT EXISTS" in statements
+    assert "CREATE INDEX IF NOT EXISTS" in statements
+
+
+def test_build_script_skips_the_official_load_scripts() -> None:
+    script = (PROJECT_ROOT / "scripts" / "build_database.sh").read_text(
+        encoding="utf-8"
+    )
+
+    # Os scripts de carga copiam CSVs do Inep, que não são versionados.
+    assert "011_load_" not in script.replace(
+        "# Os scripts 011_load_*.psql são deliberadamente ignorados", ""
+    )
+    # Aborta no primeiro erro, senão o CI passaria com o banco pela metade.
+    assert "set -euo pipefail" in script
+    assert "ON_ERROR_STOP=1" in script
+    # A materialização roda duas vezes para provar idempotência.
+    assert script.count("033_materialize_supply.sql") == 2
+
+
+def test_workflow_runs_style_tests_and_the_sql_fixture() -> None:
+    workflow = (
+        PROJECT_ROOT / ".github" / "workflows" / "verificacao.yml"
+    ).read_text(encoding="utf-8")
+
+    assert "ruff check ." in workflow
+    assert "pytest -q" in workflow
+    assert "postgres:17" in workflow
+    assert "scripts/build_database.sh --fixture" in workflow
+    # A versão mínima declarada em pyproject.toml precisa estar na matriz.
+    assert '"3.11"' in workflow
+
+
 def test_analytics_reconciles_ead_dimensions() -> None:
     analytics = (
         PROJECT_ROOT

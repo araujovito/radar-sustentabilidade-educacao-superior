@@ -49,5 +49,5 @@
 
 - [ ] Criar painel orientado a decisões.
 - [ ] Publicar relatório executivo com achados e limitações.
-- [ ] Automatizar testes e verificações no GitHub Actions.
+- [x] Automatizar testes e verificações no GitHub Actions.
 - [ ] Preparar demonstração reproduzível e documentação final.

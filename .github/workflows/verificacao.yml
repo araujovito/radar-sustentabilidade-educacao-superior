@@ -1,0 +1,96 @@
+name: verificacao
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+# Cancela execuções anteriores do mesmo ramo: só o último commit interessa.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  qualidade:
+    name: Estilo e testes (Python ${{ matrix.python-version }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        # 3.11 é o mínimo declarado em pyproject.toml; 3.12 é o ambiente de
+        # desenvolvimento. Testar os dois evita depender de detalhes de versão.
+        python-version: ["3.11", "3.12"]
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: pip
+          cache-dependency-path: pyproject.toml
+
+      - name: Instalar o pacote
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -e ".[dev]"
+
+      - name: Verificar estilo
+        run: ruff check .
+
+      - name: Executar os testes
+        run: pytest -q
+
+  sql:
+    name: Esquema e logica SQL
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        # Mesma versão principal usada no desenvolvimento local.
+        image: postgres:17
+        env:
+          POSTGRES_DB: radar_educacao
+          POSTGRES_USER: radar
+          POSTGRES_PASSWORD: radar_local
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U radar -d radar_educacao"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 12
+
+    env:
+      PGHOST: localhost
+      PGPORT: 5432
+      PGUSER: radar
+      PGPASSWORD: radar_local
+      PGDATABASE: radar_educacao
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Instalar o cliente psql
+        run: |
+          sudo apt-get update
+          sudo apt-get install --yes --no-install-recommends postgresql-client
+
+      # Aplica esquemas, uniões, staging, marts e atributos; carrega o fixture
+      # sintético; executa as verificações de comportamento.
+      #
+      # O que este job prova: os scripts aplicam na ordem de dependência, as
+      # views resolvem, a materialização é idempotente com views dependentes
+      # criadas, e a lógica de reconciliação, normalização, rotulagem e
+      # ausência de informação futura produz os valores esperados.
+      #
+      # O que não prova: integridade dos dados oficiais. Os microdados do Inep
+      # não são versionados, então a verificação usa um fixture pequeno e
+      # construído. As contagens sobre a base completa continuam sendo
+      # conferidas pelos scripts de sql/quality, executados manualmente.
+      - name: Construir o banco e verificar a logica
+        run: bash scripts/build_database.sh --fixture
